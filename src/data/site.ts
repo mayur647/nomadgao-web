@@ -61,7 +61,8 @@ export const linkFormats: Record<string, LinkFormat> = {
 };
 
 /** The format the whole site uses. Change this one letter after testing. */
-export const stayflexiFormat: keyof typeof linkFormats | null = 'A';
+// null = plain property link (no dates) until a format is confirmed on /book/link-test/.
+export const stayflexiFormat: keyof typeof linkFormats | null = null;
 
 function fmtDate(iso: string, f: LinkFormat['date']) {
   const [y, m, d] = iso.split('-');

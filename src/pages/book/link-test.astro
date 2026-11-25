@@ -10,7 +10,7 @@ import { linkFormats, stayflexiFormat } from '../../data/site';
     <h1 class="h-l" style="margin-top:10px">Which link does Stayflexi understand?</h1>
     <ol class="lead muted" style="margin:18px 0 28px;padding-left:22px">
       <li>Tap each option below. Each one opens your Stayflexi page in a new tab.</li>
-      <li>Look for the one that opens with <strong>these dates and 3 guests already filled in</strong>.</li>
+      <li>Wait about 10 seconds on each. Note which ones stay blank, which open normally, and which open with <strong>these dates and 3 guests already filled in</strong>.</li>
       <li>Set <code>stayflexiFormat</code> in <code>src/data/site.ts</code> to that letter (now: <strong>{stayflexiFormat ?? 'none'}</strong>).</li>
     </ol>
     <div class="grid" style="--min:200px;gap:14px">
@@ -19,6 +19,10 @@ import { linkFormats, stayflexiFormat } from '../../data/site';
       <label class="field"><span>Check-out</span><input id="t-out" type="date" /></label>
     </div>
     <div id="t-links" class="stack" style="margin-top:28px">
+      <a class="card" data-format="" href="#" target="_blank" rel="noopener" style="display:flex;gap:16px;align-items:center;text-decoration:none;border-style:dashed">
+        <span style="font-family:var(--display);font-weight:800;font-size:34px;width:40px">0</span>
+        <span style="flex:1"><strong>Control: plain link, no dates</strong> (should open normally)<br /><code class="muted" style="font-size:12px;word-break:break-all" data-url></code></span>
+      </a>
       {Object.entries(linkFormats).map(([k, f]) => (
         <a class="card" data-format={k} href="#" target="_blank" rel="noopener" style="display:flex;gap:16px;align-items:center;text-decoration:none">
           <span style="font-family:var(--display);font-weight:800;font-size:34px;width:40px">{k}</span>
@@ -38,7 +42,7 @@ import { linkFormats, stayflexiFormat } from '../../data/site';
   const a = new Date(); a.setDate(a.getDate() + 21); inEl.value = iso(a);
   const b = new Date(a); b.setDate(b.getDate() + 5); outEl.value = iso(b);
   const paint = () => document.querySelectorAll<HTMLAnchorElement>('[data-format]').forEach((el) => {
-    const url = bookingUrl(stayEl.value, inEl.value, outEl.value, 3, el.dataset.format);
+    const url = bookingUrl(stayEl.value, inEl.value, outEl.value, 3, el.dataset.format || null);
     el.href = url; el.querySelector('[data-url]')!.textContent = url;
   });
   [inEl, outEl, stayEl].forEach((el) => el.addEventListener('change', paint));

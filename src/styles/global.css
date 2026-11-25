@@ -79,6 +79,8 @@ p { margin: 0; }
 .mainnav a { text-decoration: none; padding: 6px 0; }
 .mainnav a[aria-current="page"] { border-bottom: 2px solid var(--laterite); }
 .header-cta { display: flex; gap: 10px; align-items: center; }
+.header-cta .btn { white-space: nowrap; }
+@media (max-width: 420px) { .logo small { display: none; } .header-cta .btn.small { padding: 10px 12px; font-size: 14px; } }
 .menu-btn { display: none; background: none; border: 2px solid var(--ink); border-radius: 999px; min-height: 44px; padding: 0 16px; font: 600 15px var(--body); }
 @media (max-width: 960px) {
   .menu-btn { display: inline-flex; align-items: center; }
