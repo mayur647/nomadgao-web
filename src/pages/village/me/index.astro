@@ -1,0 +1,103 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { u } from '../../../lib/url';
+const events = (await getCollection('events')).map((e) => ({ id: e.id, title: e.data.title, location: e.data.location, when: e.data.when }));
+---
+<Base title="Your NomadGao profile" description="Sign in to The Village, edit your member profile, see your RSVPs and messages." noindex crumbs={[{ name: 'Home', href: '/' }, { name: 'The Village', href: '/village/' }, { name: 'You', href: '/village/me/' }]}>
+  <section class="wrap" style="padding:32px 0 96px;max-width:900px">
+    <div id="signed-out" hidden>
+      <p class="label" style="color:var(--leaf);margin-bottom:14px">The Village</p>
+      <h1 class="h-l">Sign in with your email</h1>
+      <p class="lead muted" style="margin:16px 0 28px">We email you a one-tap link. No passwords. Use the email you booked with.</p>
+      <form id="signin" class="card stack" style="max-width:520px">
+        <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@email.com" /></label>
+        <button class="btn red" type="submit">Send my sign-in link</button>
+        <p id="signin-msg" class="muted" role="status"></p>
+      </form>
+    </div>
+
+    <div id="signed-in" hidden>
+      <div class="row" style="align-items:center">
+        <div><p class="label" style="color:var(--leaf)">Signed in as <span id="who"></span></p><h1 class="h-l" style="margin-top:8px">Your profile</h1></div>
+        <button id="signout" class="btn ghost small" type="button">Sign out</button>
+      </div>
+
+      <form id="profile" class="card stack" style="margin-top:28px;--gap:18px">
+        <div class="grid" style="--min:220px;gap:16px">
+          <label class="field"><span>Name people call you *</span><input name="display_name" maxlength="40" required /></label>
+          <label class="field"><span>What you do</span><input name="role" maxlength="60" placeholder="Product designer, founder, student…" /></label>
+          <label class="field"><span>Home city</span><input name="home_city" maxlength="40" /></label>
+          <label class="field"><span>Where you are staying</span><select name="location"><option value="">Not booked yet</option><option>Anjuna</option><option>Dharamkot</option><option>Lonavala</option></select></label>
+          <label class="field"><span>From</span><input type="date" name="stay_from" /></label>
+          <label class="field"><span>Until</span><input type="date" name="stay_to" /></label>
+        </div>
+        <label class="field"><span>Open to</span><input name="open_to" maxlength="120" placeholder="surf buddies, chess, hiring chats, co-working sprints" /></label>
+        <label class="field"><span>Skills (comma separated, up to 8)</span><input name="skills" placeholder="Figma, Python, photography" /></label>
+        <label class="field"><span>A few lines about you</span><textarea name="bio" maxlength="400"></textarea></label>
+        <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" name="show_dates" style="width:22px;min-height:22px" /> Show my dates to other members</label>
+        <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" name="visible" style="width:22px;min-height:22px" /> List my profile in The Village</label>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center"><button class="btn red" type="submit">Save profile</button><a href={u('/village/')}>See The Village →</a></div>
+      </form>
+
+      <h2 class="h-m" style="margin-top:48px">Your RSVPs</h2>
+      <ul id="my-rsvps" style="padding-left:20px;line-height:1.9"></ul>
+
+      <h2 class="h-m" style="margin-top:40px">Messages</h2>
+      <div id="hellos" class="stack"></div>
+
+      <details style="margin-top:40px"><summary>Your data</summary>
+        <p>You can hide your profile at any time with the checkbox above. To delete your account and everything linked to it, email us from the address you signed in with.</p>
+      </details>
+    </div>
+  </section>
+  <script type="application/json" id="ev-data" set:html={JSON.stringify(events)}></script>
+</Base>
+<script>
+  import { currentUser, signIn, signOut, myProfile, saveProfile, emptyProfile, myRsvps, myHellos, toast, esc, isDemo, type Profile } from '../../../scripts/community';
+  const events = JSON.parse(document.getElementById('ev-data')!.textContent!) as { id: string; title: string; location: string; when: string }[];
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const next = new URLSearchParams(location.search).get('next');
+  const safeNext = next && next.startsWith(base + '/') && !next.startsWith('//') ? next : null;
+
+  async function boot() {
+    const user = await currentUser();
+    document.getElementById('signed-out')!.hidden = !!user;
+    document.getElementById('signed-in')!.hidden = !user;
+    if (!user) return;
+    const pending = sessionStorage.getItem('ng_next');
+    if (pending) { sessionStorage.removeItem('ng_next'); location.href = pending; return; }
+    document.getElementById('who')!.textContent = user.email + (isDemo ? ' (demo)' : '');
+    const p = (await myProfile()) ?? emptyProfile(user.id);
+    const f = document.getElementById('profile') as HTMLFormElement;
+    const set = (n: string, v: string) => ((f.elements.namedItem(n) as HTMLInputElement).value = v ?? '');
+    (['display_name', 'role', 'home_city', 'location', 'open_to', 'bio'] as const).forEach((k) => set(k, p[k] as string));
+    set('stay_from', p.stay_from ?? ''); set('stay_to', p.stay_to ?? ''); set('skills', p.skills.join(', '));
+    (f.elements.namedItem('show_dates') as HTMLInputElement).checked = p.show_dates;
+    (f.elements.namedItem('visible') as HTMLInputElement).checked = p.visible;
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const g = (n: string) => (f.elements.namedItem(n) as HTMLInputElement).value;
+      const updated: Profile = { ...p, display_name: g('display_name'), role: g('role'), home_city: g('home_city'), location: g('location') as Profile['location'], stay_from: g('stay_from') || null, stay_to: g('stay_to') || null, open_to: g('open_to'), bio: g('bio'), skills: g('skills').split(','), show_dates: (f.elements.namedItem('show_dates') as HTMLInputElement).checked, visible: (f.elements.namedItem('visible') as HTMLInputElement).checked };
+      if (updated.stay_from && updated.stay_to && updated.stay_to < updated.stay_from) { toast('Your "until" date is before "from".'); return; }
+      const r = await saveProfile(updated); toast(r.message);
+    });
+    const mine = await myRsvps();
+    const ul = document.getElementById('my-rsvps')!;
+    const list = events.filter((e) => mine.includes(e.id));
+    ul.innerHTML = list.length ? list.map((e) => `<li><a href="${base}/happenings/${esc(e.id)}/">${esc(e.title)}</a> · ${esc(e.location)} · ${esc(e.when)}</li>`).join('') : `<li>No RSVPs yet. <a href="${base}/happenings/">See what is on</a>.</li>`;
+    const hellos = await myHellos();
+    document.getElementById('hellos')!.innerHTML = hellos.length ? hellos.map((h) => `<div class="card"><p class="label muted">${esc(h.from_name)} · ${new Date(h.created_at).toLocaleDateString('en-IN')}</p><p style="margin-top:6px">${esc(h.message)}</p></div>`).join('') : '<p class="muted">No messages yet.</p>';
+  }
+  document.getElementById('signin')!.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = ((e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement).value;
+    if (safeNext) sessionStorage.setItem('ng_next', safeNext);
+    const r = await signIn(email);
+    document.getElementById('signin-msg')!.textContent = r.message;
+    if (!r.ok) sessionStorage.removeItem('ng_next');
+    if (r.ok && isDemo) boot();
+  });
+  document.getElementById('signout')!.addEventListener('click', async () => { await signOut(); boot(); });
+  boot();
+</script>

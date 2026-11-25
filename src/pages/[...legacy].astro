@@ -1,0 +1,24 @@
+---
+// Old WordPress URLs. GitHub Pages cannot send real 301s, so each old path
+// gets a tiny page that forwards instantly. On Vercel or Cloudflare the
+// generated vercel.json / _redirects send true 301s before this is reached.
+import redirects from '../data/redirects.json';
+import { u } from '../lib/url';
+export function getStaticPaths() {
+  return redirects.map((r) => ({ params: { legacy: r.from.replace(/^\/|\/$/g, '') }, props: { to: r.to } }));
+}
+const { to } = Astro.props;
+const target = u(to);
+const abs = new URL(target, Astro.site).href;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Moved</title>
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href={abs} />
+  <meta http-equiv="refresh" content={`0; url=${target}`} />
+</head>
+<body><p>This page has moved to <a href={target}>{abs}</a>.</p></body>
+</html>

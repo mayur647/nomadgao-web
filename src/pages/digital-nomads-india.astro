@@ -1,0 +1,17 @@
+---
+import Page from '../layouts/Page.astro';
+import StayCard from '../components/StayCard.astro';
+import { stays } from '../data/stays';
+import { u } from '../lib/url';
+---
+<Page title="The digital nomad community in India." seoTitle="Digital nomad community in India: coliving, coworking and events" description="Join India's digital nomad and remote work community at NomadGao: coliving in Goa and Himachal, coworking, weekly meetups and member profiles." eyebrow="Digital nomads India" lead="Since 2019 we have hosted remote workers and digital nomads from around the world. Here is how to plug into the community, wherever you are in your journey." path="/digital-nomads-india/" crumb="Digital nomads India">
+  <section class="wrap grid" style="--min:260px;padding-bottom:64px">
+    <a class="card pinned" href={u('/guides/digital-nomad-india/')} style="text-decoration:none"><p class="label" style="color:var(--laterite)">Start here</p><p class="h-m" style="margin-top:8px">The India guide</p><p class="muted" style="margin-top:6px">Bases, internet, visas, money and getting around.</p></a>
+    <a class="card pinned" href={u('/happenings/')} style="text-decoration:none"><p class="label" style="color:var(--laterite)">Meet people</p><p class="h-m" style="margin-top:8px">Weekly meetups</p><p class="muted" style="margin-top:6px">Community dinners, hikes, chess and games nights.</p></a>
+    <a class="card pinned" href={u('/village/')} style="text-decoration:none"><p class="label" style="color:var(--laterite)">Before you land</p><p class="h-m" style="margin-top:8px">Member profiles</p><p class="muted" style="margin-top:6px">See who is around and say hi.</p></a>
+  </section>
+  <section class="wrap" style="padding-bottom:96px">
+    <h2 class="h-l" style="margin-bottom:28px">Coliving and coworking for digital nomads</h2>
+    <div class="grid" style="--min:300px">{stays.map((s) => <StayCard stay={s} />)}</div>
+  </section>
+</Page>

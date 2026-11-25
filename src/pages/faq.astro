@@ -1,0 +1,21 @@
+---
+import Page from '../layouts/Page.astro';
+import { u } from '../lib/url';
+const faqs = [
+  { q: 'What is NomadGao?', a: 'A work-friendly social stay: private rooms (and dorms in Lonavala), a dedicated coworking space and a weekly calendar of community events, in Goa, Himachal and Maharashtra.' },
+  { q: 'Is it a hostel, a hotel or coliving?', a: 'A bit of all three. You get the social life of a hostel, the privacy of your own room, and the workspace of a coworking office.' },
+  { q: 'Do I have to be a digital nomad?', a: 'No. Guests include remote employees, freelancers, founders, students, creators and teams on offsites. If you need to work and like meeting people, you will fit in.' },
+  { q: 'How do I book?', a: 'Use the Book a stay button. You pick a place, dates and a room, then confirm on our secure booking page or with a host on WhatsApp.' },
+  { q: 'Is the coworking space included?', a: 'Yes, for guests. People staying elsewhere can buy day, week or month passes.' },
+  { q: 'Are events free?', a: 'Most weekly events are free for guests and members. Some workshops and trips have a fee, shown on the event page.' },
+  { q: 'Who can see my profile?', a: 'Only confirmed guests and Passport members who are signed in. You can hide your profile or your dates at any time.' },
+  { q: 'What is your cancellation policy?', a: 'See the cancellations page for the current policy.' },
+];
+const jsonLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<Page title="Questions, answered." seoTitle="FAQ: staying, working and meeting people at NomadGao" description="Answers about NomadGao stays, coworking, booking, events, member profiles and cancellations." eyebrow="FAQ" path="/faq/" crumb="FAQ" jsonLd={jsonLd}>
+  <section class="wrap" style="max-width:860px;padding-bottom:96px">
+    {faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+    <p class="muted" style="margin-top:28px">Something else? <a href={u('/contact/')}>Talk to a host</a>.</p>
+  </section>
+</Page>

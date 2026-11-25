@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { topics } from '../../content.config';
+import { u } from '../../lib/url';
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0));
+---
+<Base title="The Journal: remote work, India guides and people stories" description="Guides to working remotely from India, Goa and Himachal, stories from the NomadGao community, and ideas on remote work and coliving." crumbs={[{ name: 'Home', href: '/' }, { name: 'Journal', href: '/blog/' }]}>
+  <section class="wrap" style="padding:32px 0 24px">
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">The Journal</p>
+    <h1 class="h-xl">Notes from the village.</h1>
+    <p class="lead muted" style="margin-top:18px">Practical guides for working from India, stories from people who passed through, and what we have learned running coliving since 2019.</p>
+  </section>
+  <nav class="wrap" aria-label="Topics" style="display:flex;gap:10px;flex-wrap:wrap;padding:12px 0 8px">
+    <a class="btn small" href={u('/blog/')} aria-current="page">All</a>
+    {Object.entries(topics).map(([k, v]) => <a class="btn small ghost" href={u(`/blog/topic/${k}/`)}>{v}</a>)}
+    <a class="btn small ghost" href={u('/guides/')}>Destination guides</a>
+  </nav>
+  <section class="wrap" style="padding:8px 0 12px">
+    <label class="field" style="max-width:420px"><span class="visually-hidden">Search the Journal</span><input type="search" id="search" placeholder="Search the Journal: visa, Goa, coliving…" /></label>
+  </section>
+  <section class="wrap grid" id="posts" style="--min:260px;gap:36px 28px;padding:24px 0 96px">
+    {posts.map((p) => <div data-search={`${p.data.title} ${p.data.description} ${p.data.tags.join(' ')}`.toLowerCase()}><PostCard post={p} /></div>)}
+  </section>
+</Base>
+<script>
+  const input = document.getElementById('search') as HTMLInputElement;
+  const items = document.querySelectorAll<HTMLElement>('#posts [data-search]');
+  input.addEventListener('input', () => { const q = input.value.trim().toLowerCase(); items.forEach((el) => (el.hidden = !!q && !el.dataset.search!.includes(q))); });
+</script>

@@ -1,0 +1,10 @@
+---
+import Page from '../layouts/Page.astro';
+import { whatsappLink } from '../data/site';
+---
+<Page title="Volunteer with us." seoTitle="Volunteer at NomadGao" description="Help host the NomadGao community in exchange for a stay. What volunteers do, how long they stay and how to apply." eyebrow="Volunteer" lead="Help run events, welcome new guests and keep the village humming, in exchange for your stay. Most volunteers stay four weeks or more." path="/volunteer/" crumb="Volunteer">
+  <section class="wrap" style="padding-bottom:96px">
+    <a class="btn red" href={whatsappLink('Hi! I would like to volunteer at NomadGao. A bit about me: ')} target="_blank" rel="noopener">Apply on WhatsApp</a>
+    <p class="muted" style="margin-top:14px">TODO: confirm the volunteer terms (hours per week, minimum stay, what is included).</p>
+  </section>
+</Page>

@@ -1,0 +1,24 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { topics } from '../../../content.config';
+import { u } from '../../../lib/url';
+export function getStaticPaths() {
+  return Object.entries(topics).map(([topic, label]) => ({ params: { topic }, props: { label } }));
+}
+const { topic } = Astro.params;
+const { label } = Astro.props;
+const posts = await getCollection('blog', (p) => p.data.topic === topic && !p.data.draft);
+---
+<Base title={`${label}: articles from the NomadGao Journal`} description={`Every NomadGao Journal article about ${label.toLowerCase()}: guides, stories and practical advice for remote workers in India.`} crumbs={[{ name: 'Home', href: '/' }, { name: 'Journal', href: '/blog/' }, { name: label, href: `/blog/topic/${topic}/` }]}>
+  <section class="wrap" style="padding:32px 0 24px">
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">Journal topic</p>
+    <h1 class="h-xl">{label}</h1>
+    <nav aria-label="Topics" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px">
+      <a class="btn small ghost" href={u('/blog/')}>All</a>
+      {Object.entries(topics).map(([k, v]) => <a class={`btn small ${k === topic ? '' : 'ghost'}`} href={u(`/blog/topic/${k}/`)} aria-current={k === topic ? 'page' : undefined}>{v}</a>)}
+    </nav>
+  </section>
+  <section class="wrap grid" style="--min:260px;gap:36px 28px;padding:24px 0 96px">{posts.map((p) => <PostCard post={p} />)}</section>
+</Base>

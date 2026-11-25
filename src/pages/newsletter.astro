@@ -1,0 +1,14 @@
+---
+import Page from '../layouts/Page.astro';
+import { u } from '../lib/url';
+---
+<Page title="The Monday letter." seoTitle="NomadGao newsletter" description="One email every Monday: what is on at each NomadGao location, who is arriving, new guides from the Journal and one good read." eyebrow="Newsletter" lead="What is on, who is arriving, one good read. Every Monday, no spam." path="/newsletter/" crumb="Newsletter">
+  <section class="wrap" style="padding-bottom:96px;max-width:640px">
+    <!-- TODO: point this form at your newsletter tool (Mailchimp, Brevo, Substack…) and add its domain to form-action in the CSP. -->
+    <form class="card stack" action="#" method="post" id="nl">
+      <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="email" /></label>
+      <button class="btn red" type="submit">Subscribe</button>
+      <p class="muted" style="font-size:14px">Prefer feeds? <a href={u('/rss.xml')}>RSS for the Journal</a> · <a href={u('/happenings/calendar.ics')}>calendar for events</a></p>
+    </form>
+  </section>
+</Page>

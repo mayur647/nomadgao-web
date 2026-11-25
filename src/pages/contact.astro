@@ -1,0 +1,11 @@
+---
+import Page from '../layouts/Page.astro';
+import { site, whatsappLink } from '../data/site';
+---
+<Page title="Talk to a host." seoTitle="Contact NomadGao" description="Questions about staying, coworking, team retreats or partnerships? WhatsApp or email the NomadGao team." eyebrow="Contact" lead="The fastest way to reach us is WhatsApp. A real person answers, usually within a few hours." path="/contact/" crumb="Contact">
+  <section class="wrap grid" style="--min:280px;padding-bottom:96px">
+    <a class="card pinned" href={whatsappLink('Hi NomadGao!')} target="_blank" rel="noopener" style="text-decoration:none"><p class="label" style="color:var(--leaf)">WhatsApp</p><p class="h-m" style="margin-top:8px">+{site.whatsapp.slice(0, 2)} {site.whatsapp.slice(2)}</p></a>
+    <a class="card pinned" href={`mailto:${site.email}`} style="text-decoration:none"><p class="label" style="color:var(--leaf)">Email</p><p class="h-m" style="margin-top:8px">{site.email}</p></a>
+    <a class="card pinned" href={site.social.instagram} target="_blank" rel="noopener" style="text-decoration:none"><p class="label" style="color:var(--leaf)">Instagram</p><p class="h-m" style="margin-top:8px">@nomad.gao</p></a>
+  </section>
+</Page>

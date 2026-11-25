@@ -1,0 +1,20 @@
+---
+import Page from '../layouts/Page.astro';
+import Photo from '../components/Photo.astro';
+const team = [['Mayur', 'Founder and CEO'], ['Shahzada', 'Co-founder, co-founding host'], ['Mayank', 'Head of Marketing'], ['Alfred', 'Head of Finance'], ['Anisa', 'Community Manager, Goa'], ['Sharvani', 'Content Marketer'], ['Ross', 'Himachal Operations Manager']];
+---
+<Page title="By people who work from anywhere, for people who work from anywhere." seoTitle="Our story" description="NomadGao started in 2019 in a tiny home in Assagao, Goa. The story of India's work-friendly social stays and the people who run them." eyebrow="Our story" path="/about/" crumb="About">
+  <section class="wrap" style="display:flex;flex-wrap:wrap;gap:48px;padding-bottom:72px">
+    <div class="prose" style="flex:999 1 520px">
+      <p>NomadGao started in 2019, when Mayur and his partner Joy built a tiny home in Assagao, Goa, after years of building remote teams and travelling the world. It became our first community.</p>
+      <p>Mayur had been working remotely since 2014, and running retreats taught him something simple: the places people loved had community, but rarely a proper place to work. So we built both.</p>
+      <p>Shahzada arrived as a member and stayed to lead the community. Today we run stays in Anjuna, Dharamkot and Lonavala, with the same idea in each: a village where people who work from anywhere can find their people.</p>
+      <p><em>Gao</em> means village. That is still the idea.</p>
+    </div>
+    <div style="flex:1 1 320px"><Photo caption="the first tiny home in Assagao" color="var(--clay)" height="420px" /></div>
+  </section>
+  <section class="sand"><div class="wrap section">
+    <h2 class="h-l" style="margin-bottom:28px">The team</h2>
+    <div class="grid" style="--min:200px">{team.map(([n, r]) => <div class="card"><div aria-hidden="true" style="width:56px;height:56px;border-radius:50%;background:var(--leaf)"></div><p style="font-weight:600;margin-top:12px">{n}</p><p class="muted" style="font-size:15px">{r}</p></div>)}</div>
+  </div></section>
+</Page>

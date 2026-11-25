@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { stays } from '../../data/stays';
+import { u, formatDate } from '../../lib/url';
+export async function getStaticPaths() {
+  return (await getCollection('guides')).map((g) => ({ params: { slug: g.id }, props: { g } }));
+}
+const { g } = Astro.props;
+const { Content, headings } = await render(g);
+const stay = stays.find((s) => s.slug === g.data.relatedStay);
+const jsonLd = { '@context': 'https://schema.org', '@type': 'Article', headline: g.data.title, description: g.data.description, dateModified: g.data.updatedDate.toISOString(), author: { '@type': 'Organization', name: 'NomadGao' } };
+---
+<Base title={g.data.title} description={g.data.description} type="article" jsonLd={jsonLd} crumbs={[{ name: 'Home', href: '/' }, { name: 'Guides', href: '/guides/' }, { name: g.data.region, href: `/guides/${g.id}/` }]}>
+  <article class="wrap" style="padding:28px 0 96px">
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">Guide · {g.data.region} · last checked {formatDate(g.data.updatedDate)}</p>
+    <h1 class="h-l" style="font-size:clamp(40px,6vw,76px);max-width:900px">{g.data.title}</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;margin-top:40px">
+      <aside style="flex:1 1 220px;position:sticky;top:96px" class="stack">
+        <nav aria-label="In this guide"><p class="label muted" style="margin-bottom:10px">In this guide</p><ol style="padding-left:18px;line-height:1.9;font-size:15px">{headings.filter((h) => h.depth === 2).map((h) => <li><a href={`#${h.slug}`} style="text-decoration:none">{h.text}</a></li>)}</ol></nav>
+        {stay && <a class="btn red" href={u(`/stays/${stay.slug}/`)}>Stay in {stay.name}</a>}
+      </aside>
+      <div class="prose" style="flex:999 1 560px;min-width:0"><Content /></div>
+    </div>
+  </article>
+</Base>

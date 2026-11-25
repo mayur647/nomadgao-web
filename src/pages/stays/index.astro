@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import StayCard from '../../components/StayCard.astro';
+import { stays } from '../../data/stays';
+---
+<Base title="Stays: coliving and coworking in Goa, Himachal and Lonavala" description="Compare NomadGao stays in Anjuna (Goa), Dharamkot (Himachal) and Lonavala (Maharashtra): rooms, dorms, coworking and community events." crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }]}>
+  <section class="wrap section">
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">Three villages, one standard</p>
+    <h1 class="h-xl">Where do you want to wake up?</h1>
+    <p class="lead muted" style="margin-top:20px">Every NomadGao stay has a real workspace, backup power and a weekly calendar of things to do with the people around you.</p>
+    <div class="grid" style="--min:300px;margin-top:48px">{stays.map((s) => <StayCard stay={s} />)}</div>
+  </section>
+  <section class="wrap" style="padding-bottom:96px;overflow-x:auto">
+    <h2 class="h-m" style="margin-bottom:20px">At a glance</h2>
+    <table style="border-collapse:collapse;min-width:640px;width:100%;font-size:16px">
+      <thead><tr>{['', ...stays.map((s) => s.name)].map((h) => <th scope="col" style="text-align:left;padding:12px;border-bottom:2px solid var(--ink)">{h}</th>)}</tr></thead>
+      <tbody>
+        <tr><th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid var(--line)">Type</th>{stays.map((s) => <td style="padding:12px;border-bottom:1px solid var(--line)">{s.kind}</td>)}</tr>
+        <tr><th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid var(--line)">Region</th>{stays.map((s) => <td style="padding:12px;border-bottom:1px solid var(--line)">{s.region}, {s.state}</td>)}</tr>
+        <tr><th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid var(--line)">Room types</th>{stays.map((s) => <td style="padding:12px;border-bottom:1px solid var(--line)">{s.rooms.map((r) => r.name).join(', ')}</td>)}</tr>
+        <tr><th scope="row" style="text-align:left;padding:12px;border-bottom:1px solid var(--line)">Best for</th>{stays.map((s) => <td style="padding:12px;border-bottom:1px solid var(--line)">{s.facts.find((f) => f.label === 'Best for')?.value}</td>)}</tr>
+      </tbody>
+    </table>
+  </section>
+</Base>

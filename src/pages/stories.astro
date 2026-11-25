@@ -1,0 +1,11 @@
+---
+import Page from '../layouts/Page.astro';
+import { site } from '../data/site';
+import { u } from '../lib/url';
+---
+<Page title="NomadGao Origin(al)s" seoTitle="NomadGao Origin(al)s: video stories" description="Short video stories about the people, places and weeks that make NomadGao, from Goa to the Himalayas." eyebrow="Video stories" lead="Short films about the people who pass through and the places they work from." path="/stories/" crumb="Stories">
+  <section class="wrap" style="padding-bottom:96px">
+    <p><a class="btn red" href={site.social.youtube} target="_blank" rel="noopener">Watch on YouTube</a></p>
+    <p class="muted" style="margin-top:14px">Prefer reading? Meet the community in the <a href={u('/blog/topic/people/')}>People stories</a>.</p>
+  </section>
+</Page>

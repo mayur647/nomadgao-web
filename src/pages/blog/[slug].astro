@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { topics } from '../../content.config';
+import { stays } from '../../data/stays';
+import { u, formatDate } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+const { post, all } = Astro.props as { post: CollectionEntry<'blog'>; all: CollectionEntry<'blog'>[] };
+const { Content, headings } = await render(post);
+const d = post.data;
+const toc = headings.filter((h) => h.depth === 2);
+const words = (post.body ?? '').split(/\s+/).length;
+const mins = Math.max(1, Math.round(words / 220));
+const stay = stays.find((s) => s.slug === d.relatedStay);
+const related = all.filter((p) => p.id !== post.id && p.data.topic === d.topic).slice(0, 3);
+const url = new URL(u(`/blog/${post.id}/`), Astro.site).href;
+const jsonLd: object[] = [{
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: d.title, description: d.description,
+  author: { '@type': 'Person', name: d.author }, publisher: { '@type': 'Organization', name: 'NomadGao' },
+  mainEntityOfPage: url, ...(d.pubDate && { datePublished: d.pubDate.toISOString() }),
+  ...((d.updatedDate ?? d.pubDate) && { dateModified: (d.updatedDate ?? d.pubDate)!.toISOString() }),
+  ...(d.cover && { image: new URL(u(d.cover), Astro.site).href }),
+}];
+if (d.faqs?.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<Base title={d.seoTitle ?? d.title} description={d.description} type="article" image={d.cover ? u(d.cover) : undefined} jsonLd={jsonLd} noindex={!d.imported}
+  crumbs={[{ name: 'Home', href: '/' }, { name: 'Journal', href: '/blog/' }, { name: topics[d.topic], href: `/blog/topic/${d.topic}/` }]}>
+  <article class="wrap" style="padding:28px 0 72px">
+    <header style="max-width:900px">
+      <p class="label" style="color:var(--leaf);margin-bottom:16px">{topics[d.topic]}{d.imported ? ` · ${mins} min read` : ''}</p>
+      <h1 class="h-l" style="font-size:clamp(40px,6vw,76px)">{d.title}</h1>
+      <p class="muted" style="margin-top:22px;font-size:15px">
+        By {d.author}{d.pubDate && <> · Published <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time></>}{d.updatedDate && <> · Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time></>}
+      </p>
+    </header>
+    {d.cover && <img src={u(d.cover)} alt={d.coverAlt ?? ''} style="border-radius:28px;margin:40px 0;width:100%;max-height:520px;object-fit:cover" />}
+    <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;margin-top:40px">
+      <aside style="flex:1 1 240px;min-width:0;position:sticky;top:96px" class="stack">
+        {toc.length > 0 && (<nav aria-label="In this article"><p class="label muted" style="margin-bottom:10px">In this article</p><ol style="padding-left:18px;line-height:1.9;font-size:15px">{toc.map((h) => <li><a href={`#${h.slug}`} style="text-decoration:none">{h.text}</a></li>)}</ol></nav>)}
+        <div class="dark" style="border-radius:20px;padding:20px">
+          <p class="label" style="color:var(--marigold);margin-bottom:8px">{stay ? `Stay in ${stay.name}` : 'Working from India?'}</p>
+          <p style="font-weight:600;margin-bottom:12px">Private room, a real desk and people to have dinner with.</p>
+          <a href={u(stay ? `/stays/${stay.slug}/` : '/stays/')} style="color:var(--marigold);font-weight:600">{stay ? `See ${stay.name}` : 'See our stays'} →</a>
+        </div>
+      </aside>
+      <div style="flex:999 1 560px;min-width:0">
+        {d.takeaways?.length && (<div class="sand" style="border-radius:20px;padding:22px 26px;margin-bottom:32px;max-width:720px"><p class="label" style="color:var(--laterite);margin-bottom:8px">The short version</p><ul style="padding-left:20px;margin:0">{d.takeaways.map((t) => <li>{t}</li>)}</ul></div>)}
+        {d.imported ? (
+          <div class="prose"><Content /></div>
+        ) : (
+          <div class="prose">
+            <p>{d.description}</p>
+            <div class="card" style="font-size:17px">
+              <p style="font-weight:600">This story is moving over from our old site.</p>
+              <p class="muted" style="margin-top:6px">Until the move is done, read the full article on nomadgao.com.</p>
+              <p style="margin-top:14px"><a class="btn small" href={`https://nomadgao.com${d.legacyPath}`} rel="noopener" target="_blank" style="color:var(--paper)">Read the full story</a></p>
+            </div>
+          </div>
+        )}
+        {d.faqs?.length && (<section style="max-width:720px;margin-top:48px"><h2 class="h-m" style="margin-bottom:12px">Questions</h2>{d.faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</section>)}
+      </div>
+    </div>
+  </article>
+  {related.length > 0 && (
+    <section class="dark"><div class="wrap section"><p class="label" style="color:var(--marigold);margin-bottom:20px">Keep reading</p><div class="grid" style="--min:240px">{related.map((p) => <PostCard post={p} dark />)}</div></div></section>
+  )}
+</Base>

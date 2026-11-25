@@ -1,0 +1,10 @@
+---
+import Page from '../layouts/Page.astro';
+import StayCard from '../components/StayCard.astro';
+import { stays } from '../data/stays';
+import { u } from '../lib/url';
+---
+<Page title="Coliving in India, with a real place to work." seoTitle="Coliving in India: Goa, Himachal and Lonavala" description="NomadGao coliving: private rooms, shared spaces, a dedicated coworking space and community events in Goa, Dharamkot and Lonavala." eyebrow="Coliving" lead="Coliving means your own room, shared spaces and people around you who are also building something. Ours adds a proper workspace and a calendar that gets you out of your room." path="/coliving/" crumb="Coliving">
+  <section class="wrap" style="padding-bottom:40px"><p><a href={u('/blog/what-is-coliving/')}>New to coliving? Read what it is and who it suits →</a></p></section>
+  <section class="wrap grid" style="--min:300px;padding-bottom:96px">{stays.map((s) => <StayCard stay={s} />)}</section>
+</Page>

@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import EventCard from '../../components/EventCard.astro';
+import { upcomingEvents } from '../../lib/events';
+import { whatsappLink } from '../../data/site';
+import { u } from '../../lib/url';
+const events = await upcomingEvents();
+---
+<Base title="Happenings: community events in Goa, Dharamkot and Lonavala" description="Hikes, chess club, games nights, meetups and workshops at NomadGao. See what is on this week and RSVP in one tap." crumbs={[{ name: 'Home', href: '/' }, { name: 'Happenings', href: '/happenings/' }]}>
+  <section class="wrap" style="padding:32px 0 24px">
+    <div class="row">
+      <div style="flex:1 1 560px">
+        <p class="label" style="color:var(--laterite);margin-bottom:14px">Happenings</p>
+        <h1 class="h-xl">Say yes to<br />something tonight.</h1>
+      </div>
+      <div class="dark" style="flex:0 1 360px;border-radius:22px;padding:22px">
+        <p class="label" style="color:var(--marigold)">Your week</p>
+        <p style="font-family:var(--display);font-weight:800;font-size:40px"><span data-my-total>0</span> RSVPs</p>
+        <p class="muted" style="font-size:14px">Hosts get a headcount; you get the calendar invite on each event page.</p>
+      </div>
+    </div>
+  </section>
+  <section class="wrap" style="padding-bottom:16px;display:flex;gap:10px;flex-wrap:wrap" aria-label="Filter by location">
+    {['All', 'Anjuna', 'Dharamkot', 'Lonavala'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
+  </section>
+  <section class="wrap grid" style="--min:320px;padding:16px 0 64px" id="event-grid">
+    {events.map((x) => <EventCard e={x.entry} next={x.next} />)}
+  </section>
+  <section class="wrap grid" style="--min:320px;padding-bottom:96px">
+    <div class="sand" style="border-radius:24px;padding:32px">
+      <p class="label" style="color:var(--laterite);margin-bottom:10px">Host something</p>
+      <h2 class="h-m" style="margin-bottom:12px">Got a skill? Run a session.</h2>
+      <p class="muted" style="margin-bottom:20px">Members propose workshops, talks and skill swaps. We give you the room, the chai and a crowd.</p>
+      <a class="btn" href={whatsappLink('Hi! I would like to host a session at NomadGao. Here is my idea: ')} target="_blank" rel="noopener">Propose an event</a>
+    </div>
+    <div class="green" style="border-radius:24px;padding:32px">
+      <p class="label" style="color:var(--marigold);margin-bottom:10px">Never miss one</p>
+      <h2 class="h-m" style="margin-bottom:12px">Subscribe to the calendar.</h2>
+      <p class="muted" style="margin-bottom:20px">Every event as a calendar feed. Works with Google Calendar, Apple Calendar and Outlook.</p>
+      <a class="btn yellow" href={u('/happenings/calendar.ics')}>Add the calendar</a>
+    </div>
+  </section>
+</Base>
+<script>
+  import '../../scripts/rsvp';
+  const btns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  btns.forEach((b) => b.addEventListener('click', () => {
+    const f = b.dataset.filter!;
+    btns.forEach((x) => { const on = x === b; x.classList.toggle('ghost', !on); x.setAttribute('aria-pressed', String(on)); });
+    document.querySelectorAll<HTMLElement>('#event-grid [data-event]').forEach((c) => (c.hidden = f !== 'All' && c.dataset.location !== f));
+  }));
+</script>

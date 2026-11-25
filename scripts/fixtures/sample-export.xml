@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+<item>
+  <title>Test: What is coliving?</title>
+  <link>https://nomadgao.com/blog/digital-nomadism/what-is-coliving/</link>
+  <dc:creator><![CDATA[Sharvani Chandvale]]></dc:creator>
+  <content:encoded><![CDATA[<h1>What is coliving</h1><p style="color:red">Coliving is <strong>shared living</strong>. See <a href="https://nomadgao.com/blog/digital-nomadism/coliving-spaces-vs-airbnbs-digital-nomads/">coliving vs Airbnb</a> and <a href="https://www.nomadgao.com/our-story/">our story</a>.</p>[vc_row]<p>&nbsp;</p><h2>Who it suits</h2><ul><li>Remote workers</li><li>Founders</li></ul><img src="https://example.invalid/wp-content/uploads/IMG_1.jpg" alt="">]]></content:encoded>
+  <wp:post_id>10</wp:post_id>
+  <wp:post_date>2023-06-01 10:00:00</wp:post_date>
+  <wp:post_modified>2024-01-15 10:00:00</wp:post_modified>
+  <wp:status>publish</wp:status>
+  <wp:post_type>post</wp:post_type>
+  <wp:postmeta><wp:meta_key>_yoast_wpseo_metadesc</wp:meta_key><wp:meta_value>Coliving explained by people who run a coliving space in India: what it is, what it costs and who it suits best.</wp:meta_value></wp:postmeta>
+</item>
+<item>
+  <title>Unknown post</title>
+  <link>https://nomadgao.com/blog/something-else/</link>
+  <content:encoded><![CDATA[<p>x</p>]]></content:encoded>
+  <wp:post_id>11</wp:post_id><wp:status>publish</wp:status><wp:post_type>post</wp:post_type>
+</item>
+</channel>
+</rss>

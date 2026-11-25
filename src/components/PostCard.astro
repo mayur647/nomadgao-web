@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { topics } from '../content.config';
+import { u } from '../lib/url';
+interface Props { post: CollectionEntry<'blog'>; dark?: boolean }
+const { post, dark = false } = Astro.props;
+const palette = ['var(--clay)', 'var(--slate)', 'var(--leaf)', 'var(--marigold)', 'var(--laterite)'];
+const color = palette[[...post.id].reduce((a, c) => a + c.charCodeAt(0), 0) % palette.length];
+---
+<a href={u(`/blog/${post.id}/`)} data-topic={post.data.topic} style="text-decoration:none;display:block">
+  {post.data.cover
+    ? <img src={u(post.data.cover)} alt={post.data.coverAlt ?? ''} loading="lazy" style="border-radius:18px;aspect-ratio:4/3;object-fit:cover;width:100%" />
+    : <div style={`background:${color};border-radius:18px;aspect-ratio:4/3`} aria-hidden="true"></div>}
+  <p class="label" style={`margin:14px 0 6px;color:${dark ? 'var(--marigold)' : 'var(--leaf)'}`}>{topics[post.data.topic]}</p>
+  <h3 style="font-family:var(--body);font-weight:600;font-size:20px;line-height:1.3;letter-spacing:0">{post.data.title}</h3>
+</a>

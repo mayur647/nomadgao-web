@@ -1,0 +1,392 @@
+{
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/blog/digital-nomadism/what-is-coliving/",
+      "destination": "/blog/what-is-coliving/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/saleena-digital-nomad-yoga-teacher/",
+      "destination": "/blog/saleena-digital-nomad-yoga-teacher/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-pratik-and-vita-a-digital-nomad-couple-in-the-making/",
+      "destination": "/blog/pratik-vita-digital-nomad-couple/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/upi-payments-foreigners-india/",
+      "destination": "/blog/upi-payments-foreigners-india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/banker-to-backpacker-meet-monika-an-indian-digital-nomad-on-the-rise/",
+      "destination": "/blog/monika-indian-digital-nomad/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/my-experience-as-a-first-time-digital-nomad-in-europe/",
+      "destination": "/blog/first-time-digital-nomad-europe/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-nomadgaos-new-co-founder-shahzada-arora/",
+      "destination": "/blog/shahzada-arora-nomadgao-co-founder/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-jagruti-khabiya-eco-entrepreneur-founder-of-araatrika/",
+      "destination": "/blog/jagruti-khabiya-araatrika/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-my-misfit-background-turned-me-into-a-community-builder/",
+      "destination": "/blog/misfit-to-community-builder/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/tips-on-dating-as-a-digital-nomad/",
+      "destination": "/blog/dating-as-a-digital-nomad/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-priya-majumdar-a-founder-a-traveller-and-a-web3-genius/",
+      "destination": "/blog/priya-majumdar-founder-web3/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-dhinesh-and-swethitha-remote-workers-parents-to-shiro-and-dedicated-hustlers/",
+      "destination": "/blog/dhinesh-swethitha-remote-workers/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/news-updates/new-digital-nomad-space-india/",
+      "destination": "/blog/goodbye-assagao-welcome-naggar/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/team-retreats-why-you-should-plan-one-now/",
+      "destination": "/blog/team-retreats-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-siddharth-pillai-an-entrepreneur-tech-master-and-a-man-wearing-many-hats/",
+      "destination": "/blog/siddharth-pillai-entrepreneur/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/goa-vs-bali-choose-your-next-workation-destination/",
+      "destination": "/blog/goa-vs-bali-workation/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/mountain-workations-your-guide-to-working-remotely-in-naggar-himachal/",
+      "destination": "/blog/workation-naggar-himachal/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/nomadgao-completes-2-years-in-its-mission-to-turn-india-into-a-digital-nomad-hub/",
+      "destination": "/blog/nomadgao-two-years/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hybrid-remote-work-is-bound-to-fail-whats-next/",
+      "destination": "/blog/hybrid-work-is-failing/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/5-reasons-that-will-convince-you-to-work-from-anywhere/",
+      "destination": "/blog/why-work-from-anywhere/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/coliving-spaces-vs-airbnbs-digital-nomads/",
+      "destination": "/blog/coliving-vs-airbnb/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/tips-to-design-your-makeshift-wfh-workspace/",
+      "destination": "/blog/home-workspace-setup-tips/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/7-reasons-nomadgao-is-better-than-a-hostel-for-your-next-workation/",
+      "destination": "/blog/nomadgao-vs-hostel-workation/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/why-is-a-coworking-space-all-that-you-need-right-now/",
+      "destination": "/blog/benefits-of-coworking-space/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/how-to-battle-loneliness-as-a-digital-nomad/",
+      "destination": "/blog/digital-nomad-loneliness/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/5-travel-hacks-for-digital-nomads-on-a-budget/",
+      "destination": "/blog/budget-travel-hacks-digital-nomads/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/remote-work/workations-vs-traditional-offsites/",
+      "destination": "/blog/workations-vs-offsites/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/bangalore-to-goa-how-to-make-the-best-of-your-workation-road-trip/",
+      "destination": "/blog/bangalore-to-goa-road-trip/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/working-from-home-5-reasons-to-work-from-goa-instead/",
+      "destination": "/blog/work-from-goa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/why-wfh-7-reasons-to-work-from-goa-this-monsoon/",
+      "destination": "/blog/goa-monsoon-workation/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/remote-work/8-ways-to-convince-your-boss-to-let-you-work-from-home/",
+      "destination": "/blog/convince-boss-remote-work/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/5-things-to-do-in-goa-during-the-winters/",
+      "destination": "/blog/things-to-do-goa-winter/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-protima-a-freelancer-founder-and-a-revolutionary/",
+      "destination": "/blog/protima-freelancer-founder/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/remote-work/5-accessories-to-make-wfh-healthier/",
+      "destination": "/blog/healthy-wfh-accessories/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/heres-all-you-need-to-know-about-being-a-digital-nomad-in-india/",
+      "destination": "/blog/digital-nomad-india-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/meet-anushka-a-changemaker-cancer-survivor-and-an-employee-turned-coconut-at-nomadgao/",
+      "destination": "/blog/anushka-changemaker/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/top-10-places-to-visit-in-goa-on-a-month-long-workation/",
+      "destination": "/blog/places-to-visit-goa-workation/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/remote-workers-best-places-stay-anjuna/",
+      "destination": "/blog/where-to-stay-anjuna-remote-workers/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/long-stay-digital-nomads-goa-india/",
+      "destination": "/blog/long-stay-digital-nomads-goa-india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/people/garima-digital-nomad-yogini-india/",
+      "destination": "/blog/garima-digital-nomad-yogini-india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/tourist-traps-to-avoid-as-a-digital-nomad-in-india-2023/",
+      "destination": "/blog/india-tourist-traps-digital-nomads/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/digital-nomad-visa-india-guide/",
+      "destination": "/blog/digital-nomad-visa-india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/danang-vietnam-vs-goa-india/",
+      "destination": "/blog/da-nang-vs-goa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/digital-nomads-sim-card-in-india/",
+      "destination": "/blog/buy-sim-card-india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/travel-tips-india/renting-bike-goa/",
+      "destination": "/blog/rent-scooter-goa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/digital-nomadism/jay-digital-nomad-india/",
+      "destination": "/blog/jay-digital-nomad-india/",
+      "permanent": true
+    },
+    {
+      "source": "/coliving-destinations-remote-work-india/",
+      "destination": "/stays/",
+      "permanent": true
+    },
+    {
+      "source": "/destinations/coliving-coworking-remote-work-anjuna/",
+      "destination": "/stays/goa-anjuna/",
+      "permanent": true
+    },
+    {
+      "source": "/destinations/coliving-coworking-remote-work-dharamkot-dharamshala/",
+      "destination": "/stays/dharamkot/",
+      "permanent": true
+    },
+    {
+      "source": "/experiences/",
+      "destination": "/stays/",
+      "permanent": true
+    },
+    {
+      "source": "/co-working/",
+      "destination": "/coworking/",
+      "permanent": true
+    },
+    {
+      "source": "/trips/",
+      "destination": "/happenings/",
+      "permanent": true
+    },
+    {
+      "source": "/team-retreats/",
+      "destination": "/teams/",
+      "permanent": true
+    },
+    {
+      "source": "/nomadgao-community/",
+      "destination": "/village/",
+      "permanent": true
+    },
+    {
+      "source": "/nomadgao-events/",
+      "destination": "/happenings/",
+      "permanent": true
+    },
+    {
+      "source": "/online-community/",
+      "destination": "/digital-nomads-india/",
+      "permanent": true
+    },
+    {
+      "source": "/nomadgao-passport/",
+      "destination": "/passport/",
+      "permanent": true
+    },
+    {
+      "source": "/destination-guides-remote-work-digital-nomads/",
+      "destination": "/guides/",
+      "permanent": true
+    },
+    {
+      "source": "/destination-guides/remote-work-digital-nomads/India/india/",
+      "destination": "/guides/digital-nomad-india/",
+      "permanent": true
+    },
+    {
+      "source": "/destination-guides/remote-work-digital-nomads/India/goa/",
+      "destination": "/guides/remote-work-goa/",
+      "permanent": true
+    },
+    {
+      "source": "/destination-guides/remote-work-digital-nomads/India/dharamkot/",
+      "destination": "/guides/remote-work-dharamkot/",
+      "permanent": true
+    },
+    {
+      "source": "/ng-newsletter/",
+      "destination": "/newsletter/",
+      "permanent": true
+    },
+    {
+      "source": "/nomadgao-originals/",
+      "destination": "/stories/",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
+      "destination": "/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/our-story/",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/user-terms/",
+      "destination": "/legal/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy/",
+      "destination": "/legal/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/cancellation-and-refund-policy/",
+      "destination": "/legal/cancellations/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/:slug*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tag/:slug*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/events/:slug*",
+      "destination": "/happenings/",
+      "permanent": true
+    },
+    {
+      "source": "/web-stories/:slug*",
+      "destination": "/blog/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ]
+}

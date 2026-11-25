@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import EventCard from '../../components/EventCard.astro';
+import PostCard from '../../components/PostCard.astro';
+import { stays, type Stay } from '../../data/stays';
+import { upcomingEvents } from '../../lib/events';
+import { getCollection } from 'astro:content';
+import { u } from '../../lib/url';
+import { whatsappLink } from '../../data/site';
+
+export function getStaticPaths() {
+  return stays.map((s) => ({ params: { slug: s.slug }, props: { stay: s } }));
+}
+const { stay } = Astro.props as { stay: Stay };
+const events = (await upcomingEvents(stay.name)).slice(0, 3);
+const posts = (await getCollection('blog', (p) => p.data.relatedStay === stay.slug)).slice(0, 3);
+const fromPrice = stay.rooms.map((r) => r.priceWeek).filter(Boolean).sort((a, b) => a! - b!)[0];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': stay.kind.includes('hostel') ? 'Hostel' : 'LodgingBusiness',
+    name: `NomadGao ${stay.name}`,
+    description: stay.summary,
+    address: { '@type': 'PostalAddress', addressLocality: stay.name, addressRegion: stay.state, addressCountry: 'IN' },
+    amenityFeature: stay.workspace.map((w) => ({ '@type': 'LocationFeatureSpecification', name: w.title, value: true })),
+    url: new URL(u(`/stays/${stay.slug}/`), Astro.site).href,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: stay.faqs.filter((f) => !f.a.startsWith('TODO')).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={`${stay.kind} in ${stay.name}, ${stay.state}`} description={`${stay.summary.split('. ').slice(0, 2).join('. ')}.`.slice(0, 165)} jsonLd={jsonLd} crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }, { name: stay.name, href: `/stays/${stay.slug}/` }]}>
+  <section class="wrap" style="padding-top:28px">
+    <div class="row">
+      <div style="flex:1 1 560px;min-width:0">
+        <p class="label" style="color:var(--leaf);margin-bottom:14px">{stay.kind} · {stay.region}, {stay.state}</p>
+        <h1 class="h-xl">{stay.tagline}</h1>
+      </div>
+      <p class="lead" style="flex:0 1 440px">{stay.summary}</p>
+    </div>
+    <div class="grid" style="--min:260px;margin-top:40px;gap:14px">
+      <Photo caption={`${stay.name}: the house`} color={stay.color} height="300px" />
+      <Photo caption="the workspace" color="var(--ink)" height="300px" />
+      <Photo caption="a private room" color="var(--marigold)" height="300px" />
+    </div>
+  </section>
+
+  <section class="wrap section" style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+    <div style="flex:999 1 600px;min-width:0" class="stack">
+      <dl class="grid" style="--min:200px;gap:14px;margin:0">
+        {stay.facts.map((f) => <div class="card" style="padding:16px"><dt class="label" style="color:var(--laterite)">{f.label}</dt><dd style="margin:6px 0 0;font-weight:600">{f.value}</dd></div>)}
+      </dl>
+
+      <h2 class="h-l" style="margin-top:56px" id="workspace">The workspace</h2>
+      <div class="grid" style="--min:220px;gap:14px">
+        {stay.workspace.map((w) => <div class="card" style="padding:18px"><p style="font-weight:600;font-size:18px">{w.title}</p><p class="muted" style="font-size:15px;margin-top:4px">{w.text}</p></div>)}
+      </div>
+
+      <h2 class="h-l" style="margin-top:56px" id="rooms">Rooms</h2>
+      <div class="stack">
+        {stay.rooms.map((r) => (
+          <div class="card" style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;border-width:0">
+            <div style={`flex:0 0 180px;height:130px;border-radius:14px;background:${stay.color}`} aria-hidden="true"></div>
+            <div style="flex:1 1 240px;min-width:0">
+              <h3 style="font-family:var(--body);font-weight:600;font-size:21px;letter-spacing:0">{r.name}</h3>
+              <p class="muted" style="font-size:15px">{r.house ? `${r.house} · ` : ''}Sleeps {r.sleeps} · {r.features.join(' · ')}</p>
+            </div>
+            <div style="text-align:right">
+              <p style="font-weight:700;font-size:19px">{r.priceWeek ? `₹${r.priceWeek.toLocaleString('en-IN')}` : 'Rates on request'}</p>
+              <p class="muted" style="font-size:13px;margin-bottom:10px">{r.priceWeek ? 'per week' : 'see live prices'}</p>
+              <a class="btn small" href={u(`/book/?stay=${stay.slug}&room=${r.id}`)}>Choose</a>
+            </div>
+          </div>
+        ))}
+        <div class="sand" style="border-radius:22px;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+          <div><p style="font-weight:600">Just need a desk?</p><p class="muted" style="font-size:15px">Day, week and month coworking passes for people staying elsewhere.</p></div>
+          <a class="btn ghost small" href={u('/coworking/')}>Coworking passes</a>
+        </div>
+      </div>
+
+      <h2 class="h-l" style="margin-top:56px">A week at {stay.name}</h2>
+      <p class="muted">The rhythm that repeats. One-off events are added to <a href={u('/happenings/')}>Happenings</a>.</p>
+      <div style="border-top:2px solid var(--ink)">
+        {stay.week.map((w) => <div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)"><span class="label" style="flex:0 0 120px;padding-top:4px">{w.day}</span><span style="flex:1 1 280px;font-weight:600">{w.what}</span></div>)}
+      </div>
+      {events.length > 0 && <div class="grid" style="--min:240px;margin-top:24px">{events.map((x) => <EventCard e={x.entry} next={x.next} compact />)}</div>}
+
+      <h2 class="h-l" style="margin-top:56px">Getting there</h2>
+      <ul style="padding-left:20px;line-height:1.8">{stay.gettingThere.map((g) => <li>{g}</li>)}</ul>
+
+      <h2 class="h-l" style="margin-top:56px">Questions people ask</h2>
+      <div>{stay.faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+    </div>
+
+    <aside style="flex:1 1 320px;min-width:0;position:sticky;top:96px" class="dark" >
+      <div style="background:var(--ink);border-radius:26px;padding:28px" class="stack">
+        <p class="label" style="color:var(--marigold)">Book direct · best rate</p>
+        <p style="font-family:var(--display);font-weight:800;font-size:30px;line-height:1.05">{fromPrice ? `From ₹${fromPrice.toLocaleString('en-IN')} a week.` : 'Live prices and dates.'}</p>
+        <form action={u('/book/')} method="get" class="stack" style="--gap:12px">
+          <input type="hidden" name="stay" value={stay.slug} />
+          <label class="field"><span style="color:#B5AC9E">Arrive</span><input type="date" name="in" required /></label>
+          <label class="field"><span style="color:#B5AC9E">Stay for</span>
+            <select name="len"><option value="7">A week</option><option value="30">A month</option><option value="2">A weekend</option><option value="14">Two weeks</option></select>
+          </label>
+          <button class="btn yellow" type="submit" style="width:100%">Check availability</button>
+        </form>
+        <p style="font-size:14px;color:#B5AC9E">Questions first? <a style="color:var(--marigold)" href={whatsappLink(`Hi! I'm thinking of staying at NomadGao ${stay.name}.`)} target="_blank" rel="noopener">WhatsApp the {stay.name} host</a></p>
+      </div>
+    </aside>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="wrap" style="padding-bottom:96px">
+      <h2 class="h-m" style="margin-bottom:24px">Read before you come</h2>
+      <div class="grid" style="--min:240px">{posts.map((p) => <PostCard post={p} />)}</div>
+    </section>
+  )}
+</Base>
+<script>import '../../scripts/rsvp';</script>

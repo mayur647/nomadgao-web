@@ -1,0 +1,17 @@
+---
+import Page from '../../layouts/Page.astro';
+import { getCollection } from 'astro:content';
+import { u } from '../../lib/url';
+const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order);
+---
+<Page title="Destination guides for remote workers" seoTitle="Remote work and digital nomad guides for India, Goa and Himachal" description="Practical guides to working remotely from India, Goa and Dharamkot: seasons, internet, visas, getting around and finding community." eyebrow="Guides" lead="Everything we wish someone had told us before our first month of working from somewhere new." path="/guides/" crumb="Guides">
+  <section class="wrap grid" style="--min:300px;padding-bottom:96px">
+    {guides.map((g, i) => (
+      <a href={u(`/guides/${g.id}/`)} class="card pinned" style={`text-decoration:none;display:block;${i % 2 ? 'transform:rotate(.6deg)' : 'transform:rotate(-.6deg)'}`}>
+        <p class="label" style="color:var(--laterite)">{g.data.region}</p>
+        <h2 class="h-m" style="margin:10px 0">{g.data.title}</h2>
+        <p class="muted">{g.data.description}</p>
+      </a>
+    ))}
+  </section>
+</Page>

@@ -1,0 +1,9 @@
+---
+// Photo slot. Pass `src` once real photography exists; until then it renders
+// a coloured block with the caption, so layouts stay honest.
+interface Props { caption: string; color?: string; src?: string; alt?: string; height?: string; class?: string; style?: string }
+const { caption, color = 'var(--clay)', src, alt, height = '260px', class: cls = '', style = '' } = Astro.props;
+---
+<div class={`photo ${cls}`} style={`background:${color};min-height:${height};${style}`}>
+  {src ? <img src={src} alt={alt ?? caption} loading="lazy" decoding="async" /> : <span class="label">Photo: {caption}</span>}
+</div>

@@ -1,0 +1,10 @@
+---
+import Page from '../layouts/Page.astro';
+import { whatsappLink, site } from '../data/site';
+---
+<Page title="Partner with NomadGao." seoTitle="Partnerships" description="Cafés, brands, creators and companies: partner with NomadGao on perks for members, events and team retreats." eyebrow="Partnerships" lead="We work with local cafés and services for Passport perks, with creators and artists for events, and with companies for team retreats." path="/partnerships/" crumb="Partnerships">
+  <section class="wrap" style="padding-bottom:96px;display:flex;gap:12px;flex-wrap:wrap">
+    <a class="btn red" href={whatsappLink('Hi! I would like to discuss a partnership with NomadGao.')} target="_blank" rel="noopener">Talk on WhatsApp</a>
+    <a class="btn ghost" href={`mailto:${site.email}?subject=Partnership`}>Email us</a>
+  </section>
+</Page>

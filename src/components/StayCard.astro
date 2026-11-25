@@ -1,0 +1,16 @@
+---
+import type { Stay } from '../data/stays';
+import Photo from './Photo.astro';
+import { u } from '../lib/url';
+interface Props { stay: Stay }
+const { stay } = Astro.props;
+---
+<a href={u(`/stays/${stay.slug}/`)} style="text-decoration:none;display:block">
+  <div style="position:relative">
+    <Photo caption={`${stay.name}, ${stay.region}`} color={stay.color} height="360px" />
+    <span class="chip" style="position:absolute;top:16px;left:16px">{stay.kind}</span>
+  </div>
+  <h3 class="h-m" style="margin:18px 0 6px">{stay.name}</h3>
+  <p class="muted">{stay.summary.split('. ')[0]}.</p>
+  <p style="margin-top:10px;font-weight:600">See rooms and dates →</p>
+</a>

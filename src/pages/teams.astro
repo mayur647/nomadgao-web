@@ -1,0 +1,37 @@
+---
+import Page from '../layouts/Page.astro';
+import { stays } from '../data/stays';
+import { site } from '../data/site';
+---
+<Page title="Team retreats that still get work done." seoTitle="Team offsites and workations in Goa, Himachal and Lonavala" description="Plan a team retreat or workation at NomadGao: book out a property with desks, meeting space, meals and activities in Goa, Himachal or near Mumbai." eyebrow="For teams" lead="Bring your team for a week. You get a property to yourselves, a workspace that works, and evenings that bring people closer than any Zoom call." path="/teams/" crumb="For teams">
+  <section class="wrap grid" style="--min:240px;padding-bottom:64px">
+    {[['Your own space', 'Book out a whole house or a block of rooms.'], ['Work set up', 'Desks, fast internet, power backup and a room for whole-team sessions.'], ['Food sorted', 'Meals arranged around your schedule.'], ['One great day out', 'A hike, a boat, a workshop with a local artist. We plan it.']].map(([t, d]) => <div class="card"><p style="font-weight:600;font-size:18px">{t}</p><p class="muted" style="margin-top:6px">{d}</p></div>)}
+  </section>
+  <section class="dark"><div class="wrap section" style="max-width:820px">
+    <h2 class="h-l" style="margin-bottom:12px">Tell us about your team</h2>
+    <p class="muted" style="margin-bottom:28px">We reply with dates, a plan and a quote, usually within a day.</p>
+    <form id="team-form" class="stack" style="--gap:16px">
+      <div class="grid" style="--min:220px;gap:16px">
+        <label class="field"><span style="color:#B5AC9E">Company</span><input name="company" required maxlength="80" /></label>
+        <label class="field"><span style="color:#B5AC9E">Team size</span><input name="size" type="number" min="2" max="80" required /></label>
+        <label class="field"><span style="color:#B5AC9E">Where</span><select name="where">{stays.map((s) => <option>{s.name}</option>)}<option>Not sure yet</option></select></label>
+        <label class="field"><span style="color:#B5AC9E">Rough dates</span><input name="dates" maxlength="60" placeholder="e.g. 2nd week of February" /></label>
+      </div>
+      <label class="field"><span style="color:#B5AC9E">What does a great week look like?</span><textarea name="goal" maxlength="600"></textarea></label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn yellow" type="submit" data-via="wa">Send on WhatsApp</button><button class="btn ghost" type="submit" data-via="mail">Send by email</button></div>
+    </form>
+  </div></section>
+  <script type="application/json" id="team-cfg" set:html={JSON.stringify({ wa: site.whatsapp, email: site.email })}></script>
+</Page>
+<script>
+  const cfg = JSON.parse(document.getElementById('team-cfg')!.textContent!);
+  const form = document.getElementById('team-form') as HTMLFormElement;
+  let via = 'wa';
+  form.querySelectorAll<HTMLButtonElement>('[data-via]').forEach((b) => b.addEventListener('click', () => (via = b.dataset.via!)));
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const text = `Team retreat enquiry\nCompany: ${d.get('company')}\nTeam size: ${d.get('size')}\nWhere: ${d.get('where')}\nDates: ${d.get('dates')}\nGoal: ${d.get('goal')}`;
+    location.href = via === 'wa' ? `https://wa.me/${cfg.wa}?text=${encodeURIComponent(text)}` : `mailto:${cfg.email}?subject=${encodeURIComponent('Team retreat enquiry')}&body=${encodeURIComponent(text)}`;
+  });
+</script>

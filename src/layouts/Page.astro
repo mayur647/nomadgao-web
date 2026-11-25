@@ -1,0 +1,13 @@
+---
+import Base from './Base.astro';
+interface Props { title: string; seoTitle?: string; description: string; eyebrow?: string; lead?: string; path: string; crumb: string; jsonLd?: object | object[]; noindex?: boolean }
+const { title, seoTitle, description, eyebrow, lead, path, crumb, jsonLd, noindex } = Astro.props;
+---
+<Base title={seoTitle ?? title} description={description} jsonLd={jsonLd} noindex={noindex} crumbs={[{ name: 'Home', href: '/' }, { name: crumb, href: path }]}>
+  <section class="wrap" style="padding:32px 0 40px">
+    {eyebrow && <p class="label" style="color:var(--leaf);margin-bottom:14px">{eyebrow}</p>}
+    <h1 class="h-xl" style="max-width:1000px">{title}</h1>
+    {lead && <p class="lead muted" style="margin-top:20px">{lead}</p>}
+  </section>
+  <slot />
+</Base>

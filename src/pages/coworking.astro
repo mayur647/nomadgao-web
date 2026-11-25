@@ -1,0 +1,29 @@
+---
+import Page from '../layouts/Page.astro';
+import { stays } from '../data/stays';
+import { whatsappLink } from '../data/site';
+import { u } from '../lib/url';
+const passes = [
+  { name: 'Day pass', price: 'TODO ₹', note: 'Drop in, plug in, meet people.' },
+  { name: 'Week pass', price: 'TODO ₹', note: 'Five working days at any desk.' },
+  { name: 'Month pass', price: 'TODO ₹', note: 'Your desk, your routine, the community calendar.' },
+];
+---
+<Page title="Coworking with a view, and a community." seoTitle="Coworking in Anjuna, Goa and Dharamkot, Himachal" description="Coworking day, week and month passes at NomadGao Anjuna and Dharamkot: fast broadband, power backup, ergonomic chairs and a silent room for calls." eyebrow="Cowork" lead="Every NomadGao stay comes with a real workspace. Not staying with us? Grab a pass and work alongside the people who are." path="/coworking/" crumb="Cowork">
+  <section class="wrap grid" style="--min:240px;padding-bottom:64px">
+    {[['Multiple broadband lines', 'Plus a backup, so one outage does not end your call.'], ['Power backup', 'Built for monsoon storms and mountain weather.'], ['Ergonomic chairs', 'Desks at the right height. Your back will notice.'], ['A silent room', 'For deep work and calls, away from the social space.']].map(([t, d]) => <div class="card"><p style="font-weight:600;font-size:18px">{t}</p><p class="muted" style="margin-top:6px">{d}</p></div>)}
+  </section>
+  <section class="sand"><div class="wrap section">
+    <h2 class="h-l" style="margin-bottom:28px">Passes for non-guests</h2>
+    <div class="grid" style="--min:240px">
+      {passes.map((p) => <div class="card pinned"><p class="label" style="color:var(--laterite)">{p.name}</p><p style="font-family:var(--display);font-weight:800;font-size:38px;margin:8px 0">{p.price}</p><p class="muted">{p.note}</p></div>)}
+    </div>
+    <p style="margin-top:28px"><a class="btn red" href={whatsappLink('Hi! I would like a coworking pass at NomadGao. Location: ')} target="_blank" rel="noopener">Get a pass on WhatsApp</a></p>
+  </div></section>
+  <section class="wrap section">
+    <h2 class="h-l" style="margin-bottom:28px">Where you can work</h2>
+    <div class="grid" style="--min:280px">
+      {stays.map((s) => <a href={u(`/stays/${s.slug}/#workspace`)} class="card" style="text-decoration:none"><p class="label" style="color:var(--leaf)">{s.state}</p><p class="h-m" style="margin:8px 0">{s.name}</p><ul class="muted" style="padding-left:18px;margin:0">{s.workspace.map((w) => <li>{w.title}</li>)}</ul></a>)}
+    </div>
+  </section>
+</Page>

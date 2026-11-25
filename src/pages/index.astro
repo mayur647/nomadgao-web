@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import BookingBar from '../components/BookingBar.astro';
+import StayCard from '../components/StayCard.astro';
+import EventCard from '../components/EventCard.astro';
+import PostCard from '../components/PostCard.astro';
+import Photo from '../components/Photo.astro';
+import { stays } from '../data/stays';
+import { upcomingEvents } from '../lib/events';
+import { getEntry } from 'astro:content';
+import { u } from '../lib/url';
+
+const events = (await upcomingEvents()).slice(0, 3);
+const featured = await Promise.all(
+  ['digital-nomad-visa-india', 'nomadgao-vs-hostel-workation', 'da-nang-vs-goa'].map((id) => getEntry('blog', id)),
+);
+---
+<Base title="NomadGao | Social stays with real coworking in Goa, Himachal and Lonavala" description="Work-friendly social stays in Goa, Dharamkot and Lonavala. Private rooms and dorms, a real coworking space, and community events most nights. Coliving for remote workers and digital nomads in India.">
+  <section class="wrap" style="padding-top:clamp(32px,6vw,56px);padding-bottom:64px">
+    <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-end">
+      <div style="flex:999 1 560px;min-width:0">
+        <p class="label" style="color:var(--leaf);margin-bottom:20px">Social stays with a real coworking space · Goa · Himachal · Lonavala</p>
+        <h1 class="h-xl">Come for the desk.<br /><span style="color:var(--laterite)">Stay for the people.</span></h1>
+        <p class="lead" style="margin-top:26px">NomadGao is a work-friendly social stay. Private rooms and dorms, a coworking space with backup power and proper chairs, and a calendar full of people worth meeting. <em>Gao</em> means village. That is the idea.</p>
+        <div style="margin-top:32px"><BookingBar /></div>
+      </div>
+      <div style="flex:1 1 340px;min-width:0;position:relative;height:440px" aria-hidden="true">
+        <Photo caption="rooftop desks under the mango trees" color="var(--leaf)" height="330px" style="position:absolute;right:0;top:0;width:80%;transform:rotate(2deg)" />
+        <Photo caption="community dinner" color="var(--clay)" height="240px" style="position:absolute;left:0;bottom:0;width:62%;transform:rotate(-4deg);border:6px solid var(--white);box-shadow:0 18px 40px rgba(22,19,15,.18)" />
+        <span class="chip" style="position:absolute;right:20px;bottom:30px;border:2px solid var(--ink);transform:rotate(3deg)">4.9 on Coliving.com</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark section">
+    <div class="wrap grid">
+      <div class="stack"><p class="label" style="color:var(--marigold)">01 · Work</p><h2 class="h-m">A coworking space, not a café table.</h2><p class="muted">Dedicated desks, ergonomic chairs, a silent room for calls, multiple broadband lines and power backup. Day passes for non-guests too.</p></div>
+      <div class="stack"><p class="label" style="color:var(--marigold)">02 · Stay</p><h2 class="h-m">Your room, your pace.</h2><p class="muted">Private rooms with mountain or garden views, social dorms in Lonavala. A weekend, a week or the whole season.</p></div>
+      <div class="stack"><p class="label" style="color:var(--marigold)">03 · Belong</p><h2 class="h-m">Something on, most nights.</h2><p class="muted">Hikes, chess club, games nights, workshops. Make a profile, RSVP in a tap, and see who is around before you arrive.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="row" style="margin-bottom:36px">
+      <h2 class="h-l">Pick your village</h2>
+      <p class="muted" style="max-width:420px">Beach, mountains, or a weekend out of Mumbai and Pune. The same desk standards everywhere.</p>
+    </div>
+    <div class="grid" style="--min:300px">{stays.map((s) => <StayCard stay={s} />)}</div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:80px">
+    <div class="sand" style="border-radius:32px;padding:clamp(28px,5vw,48px);display:flex;flex-wrap:wrap;gap:40px">
+      <div style="flex:1 1 280px" class="stack">
+        <p class="label" style="color:var(--laterite)">The noticeboard</p>
+        <h2 class="h-l">What's on this week</h2>
+        <p class="muted">Most events are free for guests and members. RSVP so we know how much chai to make.</p>
+        <p><a class="btn ghost" href={u('/happenings/')}>All happenings</a></p>
+      </div>
+      <div style="flex:2 1 520px;--min:230px" class="grid">
+        {events.map((x, i) => <div class={i % 2 ? 'tilt-r' : 'tilt-l'}><EventCard e={x.entry} next={x.next} compact /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="green section">
+    <div class="wrap" style="display:flex;flex-wrap:wrap;gap:56px">
+      <h2 class="h-l" style="flex:1 1 380px">Hostel energy. Hotel sleep. Office Wi-Fi.</h2>
+      <div class="grid" style="flex:1 1 440px;--min:200px">
+        <div class="stack" style="--gap:6px"><p style="font-weight:600;font-size:18px">Curated, not chaotic</p><p class="muted">People here are working on something. Conversations go further than "where are you from".</p></div>
+        <div class="stack" style="--gap:6px"><p style="font-weight:600;font-size:18px">Quiet when you need it</p><p class="muted">A silent room for calls, so your stand-up does not compete with karaoke night.</p></div>
+        <div class="stack" style="--gap:6px"><p style="font-weight:600;font-size:18px">Hosts who have done it</p><p class="muted">Run by people who have worked remotely since 2014. We know what a bad desk does to your week.</p></div>
+        <div class="stack" style="--gap:6px"><p style="font-weight:600;font-size:18px">Rooted in the village</p><p class="muted">Local guides, local cafés, local artists. Your stay keeps money in the neighbourhood.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="row" style="margin-bottom:28px">
+      <div class="stack" style="--gap:12px"><p class="label" style="color:var(--leaf)">The Village</p><h2 class="h-l">Meet people before you meet them</h2></div>
+      <a class="btn" href={u('/village/')}>Browse member profiles</a>
+    </div>
+    <p class="lead muted">Every guest and Passport member gets a profile: what you do, what you are open to, when you are around. Say hi before you land, and walk into your first community dinner knowing a few names.</p>
+  </section>
+
+  <section class="wrap" style="padding-bottom:96px">
+    <div class="grid" style="--min:320px">
+      <div class="card" style="padding:clamp(24px,4vw,40px)">
+        <p class="label" style="color:var(--laterite);margin-bottom:12px">For teams</p>
+        <h3 class="h-m" style="font-size:38px;margin-bottom:14px">Offsites that still get work done.</h3>
+        <p class="muted" style="margin-bottom:24px">Take over a property for a week. Desks, meeting space, meals and one unforgettable hike, planned for you.</p>
+        <a class="btn" href={u('/teams/')}>Plan a team retreat</a>
+      </div>
+      <div style="background:var(--laterite);color:var(--paper);border-radius:var(--r);padding:clamp(24px,4vw,40px)">
+        <p class="label" style="color:#F7D9A0;margin-bottom:12px">NomadGao Passport</p>
+        <h3 class="h-m" style="font-size:38px;margin-bottom:14px">One membership. Every village.</h3>
+        <p style="margin-bottom:24px;color:#F6E3DC">Member rates at every property, discounts at local partner cafés and a permanent spot in the community.</p>
+        <a class="btn yellow" href={u('/passport/')}>Get the Passport</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:96px">
+    <div class="row" style="margin-bottom:28px"><h2 class="h-l">From the Journal</h2><a href={u('/blog/')} style="font-weight:600">All stories and guides →</a></div>
+    <div class="grid" style="--min:260px">{featured.filter(Boolean).map((p) => <PostCard post={p!} />)}</div>
+  </section>
+</Base>
+<script>import '../scripts/rsvp';</script>

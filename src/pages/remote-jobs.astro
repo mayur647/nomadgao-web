@@ -1,0 +1,13 @@
+---
+import Page from '../layouts/Page.astro';
+import { u } from '../lib/url';
+---
+<Page title="Remote jobs" seoTitle="Remote jobs for people who want to work from anywhere" description="Where to find remote jobs if you want to work from Goa, Himachal or anywhere in India, plus how to pitch remote work to your current employer." eyebrow="Resources" lead="Our job board is moving over from the old site. Until then, these will get you started." path="/remote-jobs/" crumb="Remote jobs">
+  <section class="wrap prose" style="padding-bottom:96px">
+    <ul>
+      <li><a href={u('/blog/convince-boss-remote-work/')}>How to convince your boss to let you work remotely</a></li>
+      <li><a href={u('/blog/why-work-from-anywhere/')}>Why work from anywhere</a></li>
+      <li>Ask in <a href={u('/village/')}>The Village</a>: members often share openings.</li>
+    </ul>
+  </section>
+</Page>

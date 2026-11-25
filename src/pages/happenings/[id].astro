@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { nextOccurrence, eventJsonLd, type EventEntry } from '../../lib/events';
+import { stays } from '../../data/stays';
+import { u } from '../../lib/url';
+
+export async function getStaticPaths() {
+  return (await getCollection('events')).map((e) => ({ params: { id: e.id }, props: { e } }));
+}
+const { e } = Astro.props as { e: EventEntry };
+const next = nextOccurrence(e);
+const stay = stays.find((s) => s.name === e.data.location)!;
+const when = next.toLocaleString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' });
+const url = new URL(u(`/happenings/${e.id}/`), Astro.site).href;
+---
+<Base title={`${e.data.title} at NomadGao ${e.data.location}`} description={`${e.data.blurb} ${e.data.when} at NomadGao ${e.data.location}. RSVP and add it to your calendar.`.slice(0, 165)} jsonLd={eventJsonLd(e, next, url, `${stay.name}, ${stay.state}, India`)} crumbs={[{ name: 'Home', href: '/' }, { name: 'Happenings', href: '/happenings/' }, { name: e.data.title, href: `/happenings/${e.id}/` }]}>
+  <section class="wrap section" style="max-width:860px" data-event={e.id}>
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">{e.data.kind} · NomadGao {e.data.location}{e.data.recurring ? ' · every week' : ''}</p>
+    <h1 class="h-xl">{e.data.title}</h1>
+    <p class="lead" style="margin-top:20px">{e.data.blurb}</p>
+    <dl class="grid" style="--min:200px;gap:14px;margin:32px 0">
+      <div class="card"><dt class="label muted">Next</dt><dd style="margin:6px 0 0;font-weight:600">{when}</dd></div>
+      <div class="card"><dt class="label muted">Where</dt><dd style="margin:6px 0 0;font-weight:600"><a href={u(`/stays/${stay.slug}/`)}>NomadGao {stay.name}</a></dd></div>
+      <div class="card"><dt class="label muted">Who</dt><dd style="margin:6px 0 0;font-weight:600">{e.data.publicEvent ? 'Guests, members and friends' : 'Guests and members'}</dd></div>
+    </dl>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <button class="btn red" type="button" data-rsvp={e.id}>RSVP</button>
+      <a class="btn ghost" href={u(`/happenings/${e.id}.ics`)}>Add to calendar</a>
+      <span class="muted" data-count></span>
+    </div>
+    <p class="muted" style="margin-top:32px">Not staying with us? <a href={u('/book/')}>Book a stay</a> or ask a host if this one is open to visitors.</p>
+  </section>
+</Base>
+<script>import '../../scripts/rsvp';</script>

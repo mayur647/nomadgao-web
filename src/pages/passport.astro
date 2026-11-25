@@ -1,0 +1,16 @@
+---
+import Page from '../layouts/Page.astro';
+import { whatsappLink } from '../data/site';
+---
+<Page title="One membership. Every village." seoTitle="NomadGao Passport membership" description="The NomadGao Passport: member rates at every NomadGao stay, discounts at local partner cafés and a permanent place in the community." eyebrow="NomadGao Passport" lead="For people who keep coming back. Stay wherever you like, pay member rates, and stay part of the community between trips." path="/passport/" crumb="Passport">
+  <section class="wrap grid" style="--min:260px;padding-bottom:64px">
+    {[['Stay anywhere', 'Member rates at every NomadGao location.'], ['Local perks', 'Discounts at partner cafés and services near our stays.'], ['Always in The Village', 'Your profile and RSVPs stay active between trips.']].map(([t, d], i) => <div class="card pinned" style={`transform:rotate(${i % 2 ? 1 : -1}deg)`}><p class="h-m" style="font-size:28px">{t}</p><p class="muted" style="margin-top:8px">{d}</p></div>)}
+  </section>
+  <section class="wrap" style="padding-bottom:96px">
+    <div style="background:var(--laterite);color:var(--paper);border-radius:28px;padding:clamp(24px,4vw,44px)" class="stack">
+      <p class="label" style="color:#F7D9A0">Price</p>
+      <p style="font-family:var(--display);font-weight:800;font-size:48px">TODO ₹ / year</p>
+      <p><a class="btn yellow" href={whatsappLink('Hi! I would like to get the NomadGao Passport.')} target="_blank" rel="noopener">Get the Passport</a></p>
+    </div>
+  </section>
+</Page>

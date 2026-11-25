@@ -1,0 +1,23 @@
+{
+  "name": "nomadgao-web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import:wp": "node scripts/import-wordpress.mjs",
+    "check:links": "node scripts/check-links.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.0",
+    "@astrojs/sitemap": "^3.2.0",
+    "@supabase/supabase-js": "^2.119.2",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "fast-xml-parser": "^4.5.0",
+    "turndown": "^7.2.0"
+  }
+}

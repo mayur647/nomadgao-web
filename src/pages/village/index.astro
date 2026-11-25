@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import { u } from '../../lib/url';
+---
+<Base title="The Village: meet NomadGao members" description="Member profiles for NomadGao guests and Passport holders. See who is in Goa, Dharamkot or Lonavala, what they do and what they are open to." noindex crumbs={[{ name: 'Home', href: '/' }, { name: 'The Village', href: '/village/' }]}>
+  <section class="wrap" style="padding:32px 0 24px">
+    <div class="row">
+      <div style="flex:1 1 560px"><p class="label" style="color:var(--leaf);margin-bottom:14px">The Village · members only</p><h1 class="h-xl">Find your people<br />before check&#8209;in.</h1></div>
+      <div style="flex:0 1 380px" class="stack">
+        <p class="muted">Profiles are visible only to guests and Passport members. You choose what to show and can hide your dates at any time.</p>
+        <p><a class="btn" href={u('/village/me/')} data-me-link>Create your profile</a></p>
+      </div>
+    </div>
+  </section>
+  <p id="demo-note" class="wrap label muted" hidden>Demo mode: sample profiles, and your own profile is saved only in this browser.</p>
+  <section class="wrap" style="display:flex;gap:10px;flex-wrap:wrap;padding:16px 0" aria-label="Filter by location">
+    {['All', 'Anjuna', 'Dharamkot', 'Lonavala'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
+    <label class="field" style="flex:1 1 220px;max-width:320px;margin-left:auto"><span class="visually-hidden">Search skills or interests</span><input type="search" id="q" placeholder="Search: chess, design, surfing…" /></label>
+  </section>
+  <section class="wrap" style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;padding-bottom:96px">
+    <div id="people" class="grid" style="flex:999 1 560px;--min:240px;gap:16px" aria-live="polite"><p class="muted">Loading members…</p></div>
+    <aside id="detail" class="card" style="flex:1 1 340px;min-width:0;padding:0;overflow:hidden;position:sticky;top:96px" hidden></aside>
+  </section>
+  <section class="dark">
+    <div class="wrap section grid">
+      <div class="stack"><p class="label" style="color:var(--marigold)">Step 1</p><p class="h-m">Book or join</p><p class="muted">Every confirmed guest and Passport member can sign in by email. No passwords.</p></div>
+      <div class="stack"><p class="label" style="color:var(--marigold)">Step 2</p><p class="h-m">Make a profile</p><p class="muted">What you do, what you are open to, when you are around. Two minutes.</p></div>
+      <div class="stack"><p class="label" style="color:var(--marigold)">Step 3</p><p class="h-m">Show up</p><p class="muted">RSVP to events, say hi, and you will know a few names on day one.</p></div>
+    </div>
+  </section>
+</Base>
+<script>
+  import { listProfiles, currentUser, sayHi, isDemo, toast, esc, loginUrl, type Profile } from '../../scripts/community';
+  const colors: Record<string, string> = { Anjuna: '#C9792F', Dharamkot: '#3E5C76', Lonavala: '#1F5A3D', '': '#6B6358' };
+  const peopleEl = document.getElementById('people')!;
+  const detail = document.getElementById('detail')!;
+  let all: Profile[] = []; let filter = 'All'; let query = '';
+  if (isDemo) document.getElementById('demo-note')!.hidden = false;
+
+  const avatar = (p: Profile, size: number) => `<span aria-hidden="true" style="width:${size}px;height:${size}px;border-radius:50%;background:${colors[p.location] ?? '#6B6358'};color:#FBF8F1;display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:${size * 0.42}px;flex:0 0 auto">${esc(p.display_name[0] ?? '?')}</span>`;
+  const dates = (p: Profile) => (p.show_dates && p.stay_from ? ` · ${new Date(p.stay_from).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}${p.stay_to ? '–' + new Date(p.stay_to).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}` : '');
+
+  function render() {
+    const q = query.toLowerCase();
+    const list = all.filter((p) => (filter === 'All' || p.location === filter) && (!q || [p.display_name, p.role, p.open_to, p.bio, ...p.skills].join(' ').toLowerCase().includes(q)));
+    peopleEl.innerHTML = list.length ? list.map((p) => `
+      <button type="button" class="card" data-id="${esc(p.id)}" style="text-align:left;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:18px">
+        <span style="display:flex;gap:12px;align-items:center">${avatar(p, 52)}<span><strong style="font-size:17px">${esc(p.display_name)}</strong><br><span class="muted" style="font-size:14px">${esc(p.role)}</span></span></span>
+        <span class="label" style="color:var(--leaf)">${esc(p.location || 'Somewhere')}${esc(dates(p))}</span>
+        <span class="muted" style="font-size:14px">Open to: ${esc(p.open_to || '—')}</span>
+      </button>`).join('') : '<p class="muted">Nobody matches that yet.</p>';
+  }
+  async function open(id: string) {
+    const p = all.find((x) => x.id === id); if (!p) return;
+    detail.hidden = false;
+    detail.innerHTML = `
+      <div style="height:110px;background:${colors[p.location] ?? '#6B6358'}"></div>
+      <div style="padding:0 26px 26px;margin-top:-42px">
+        <span style="display:inline-block;border:4px solid #fff;border-radius:50%">${avatar(p, 84)}</span>
+        <h2 style="font-size:34px;margin-top:12px">${esc(p.display_name)}</h2>
+        <p class="muted">${esc(p.role)}${p.home_city ? ' · from ' + esc(p.home_city) : ''}</p>
+        <p class="label" style="color:var(--leaf);margin-top:10px">${esc(p.location || '')}${esc(dates(p))}</p>
+        ${p.bio ? `<p style="margin-top:16px">${esc(p.bio)}</p>` : ''}
+        ${p.skills.length ? `<p class="label muted" style="margin-top:20px">Skills</p><p style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">${p.skills.map((s) => `<span class="chip" style="background:var(--sand)">${esc(s)}</span>`).join('')}</p>` : ''}
+        <p class="label muted" style="margin-top:20px">Open to</p><p style="font-weight:600;margin-top:6px">${esc(p.open_to || '—')}</p>
+        <form id="hi" style="margin-top:22px" class="stack">
+          <label class="field"><span>Say hi</span><textarea name="m" maxlength="500" placeholder="Hey ${esc(p.display_name)}, fancy a coffee on Thursday?"></textarea></label>
+          <button class="btn red" type="submit">Send</button>
+          <p class="muted" style="font-size:13px">Your email stays hidden. They reply through the site.</p>
+        </form>
+      </div>`;
+    detail.querySelector('#hi')!.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      if (!(await currentUser())) { location.href = loginUrl(); return; }
+      const m = ((ev.target as HTMLFormElement).elements.namedItem('m') as HTMLTextAreaElement);
+      const r = await sayHi(p.id, m.value); toast(r.message); if (r.ok) m.value = '';
+    });
+    if (matchMedia('(max-width: 900px)').matches) detail.scrollIntoView({ behavior: 'smooth' });
+  }
+  peopleEl.addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-id]'); if (b) open(b.dataset.id!); });
+  document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b, _, all2) => b.addEventListener('click', () => {
+    filter = b.dataset.filter!; all2.forEach((x) => { x.classList.toggle('ghost', x !== b); x.setAttribute('aria-pressed', String(x === b)); }); render();
+  }));
+  document.getElementById('q')!.addEventListener('input', (e) => { query = (e.target as HTMLInputElement).value; render(); });
+
+  (async () => {
+    const user = await currentUser();
+    if (!isDemo && !user) { peopleEl.innerHTML = `<div class="card"><p style="font-weight:600">Sign in to see who is around.</p><p class="muted" style="margin:6px 0 14px">Profiles are for guests and Passport members only.</p><a class="btn" href="${loginUrl()}">Sign in</a></div>`; return; }
+    try { all = await listProfiles(); render(); if (all[0]) open(all[0].id); }
+    catch { peopleEl.innerHTML = '<p class="muted">Profiles are for confirmed guests and Passport members. If you have booked, ask a host to add your email.</p>'; }
+  })();
+</script>
