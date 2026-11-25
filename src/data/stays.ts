@@ -35,18 +35,18 @@ export const stays: Stay[] = [
   {
     slug: 'goa-anjuna',
     name: 'Anjuna',
-    property: 'NomadGao Villa Noma',
+    property: 'NomadGao Vila Nova',
     region: 'North Goa',
     state: 'Goa',
     kind: 'Coliving + coworking',
     tagline: 'Anjuna, but make it work.',
     summary:
-      'Villa Noma is our home in Anjuna, a short ride from the beach: private rooms, a coworking space with desks under the trees and a rooftop, and people who would like to grab dinner.',
+      'Vila Nova is our home in Anjuna, a short ride from the beach: twelve private rooms, a coworking space with desks under the trees and a rooftop, and people who would like to grab dinner.',
     hotelId: '23879',
     color: 'var(--clay)',
     facts: [
-      { label: 'Property', value: 'Villa Noma' },
-      { label: 'Rooms', value: 'Private rooms (TODO: count)' },
+      { label: 'Property', value: 'Vila Nova' },
+      { label: 'Rooms', value: '12 private rooms' },
       { label: 'Beach', value: 'A short scooter ride to Anjuna beach' },
       { label: 'Best for', value: 'Solo stays, couples, team offsites' },
       { label: 'Season', value: 'October to May; monsoon rates June to September' },
@@ -65,7 +65,7 @@ export const stays: Stay[] = [
     ],
     rooms: [
       // TODO: match these to the room types set up in Stayflexi
-      { id: 'vn-private', name: 'Private room', house: 'Villa Noma', sleeps: 2, features: ['Private bathroom', 'Coworking access'] },
+      { id: 'vn-private', name: 'Private room', house: 'Vila Nova', sleeps: 2, features: ['Private bathroom', 'Coworking access'] },
     ],
     gettingThere: [
       'Manohar International Airport (Mopa) is the closest airport, roughly 45 to 60 minutes by taxi. (TODO: check)',

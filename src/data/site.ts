@@ -4,7 +4,7 @@ export const site = {
   name: 'NomadGao',
   tagline: 'Come for the desk. Stay for the people.',
   description:
-    'NomadGao is a work-friendly social stay at Villa Noma in Anjuna, Goa and in Dharamkot, Himachal: private rooms, a real coworking space and a weekly calendar of community events.',
+    'NomadGao is a work-friendly social stay at Vila Nova in Anjuna, Goa and in Dharamkot, Himachal: private rooms, a real coworking space and a weekly calendar of community events.',
   founded: 2019,
   whatsapp: '918888618466', // international format, no +
   email: 'hello@nomadgao.com', // TODO: confirm the public inbox

@@ -107,7 +107,7 @@ You can also run `npm run import:wp -- --rest https://nomadgao.com`, which reads
 
 There's one booking box: property, check-in, check-out and guests. It appears on the homepage, on each stay page and on `/book/`. "See rooms and prices" sends the guest **straight to the Stayflexi page for that property, with their dates and guest count in the link**, so they don't have to choose them again.
 
-- **Property ids:** set as `hotelId` in `src/data/stays.ts` (Villa Noma `23879`, Dharamkot `23727`).
+- **Property ids:** set as `hotelId` in `src/data/stays.ts` (Vila Nova `23879`, Dharamkot `23727`).
 - **Link format:** Stayflexi doesn't publish the names its links use for dates and guests, so the site assumes format **A** (`?checkin=2026-12-10&checkout=2026-12-17&adults=2`). To confirm it:
   1. Open `/book/link-test/` on the deployed preview (from your phone is fine).
   2. Tap each option, A to I.
