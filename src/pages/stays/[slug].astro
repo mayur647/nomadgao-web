@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
+import BookingBar from '../../components/BookingBar.astro';
 import EventCard from '../../components/EventCard.astro';
 import PostCard from '../../components/PostCard.astro';
 import { stays, type Stay } from '../../data/stays';
@@ -21,7 +22,7 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': stay.kind.includes('hostel') ? 'Hostel' : 'LodgingBusiness',
-    name: `NomadGao ${stay.name}`,
+    name: stay.property,
     description: stay.summary,
     address: { '@type': 'PostalAddress', addressLocality: stay.name, addressRegion: stay.state, addressCountry: 'IN' },
     amenityFeature: stay.workspace.map((w) => ({ '@type': 'LocationFeatureSpecification', name: w.title, value: true })),
@@ -34,11 +35,11 @@ const jsonLd = [
   },
 ];
 ---
-<Base title={`${stay.kind} in ${stay.name}, ${stay.state}`} description={`${stay.summary.split('. ').slice(0, 2).join('. ')}.`.slice(0, 165)} jsonLd={jsonLd} crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }, { name: stay.name, href: `/stays/${stay.slug}/` }]}>
+<Base title={`${stay.property}: ${stay.kind.toLowerCase()} in ${stay.name}, ${stay.state}`} description={`${stay.summary.split('. ').slice(0, 2).join('. ')}.`.slice(0, 165)} jsonLd={jsonLd} crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }, { name: stay.name, href: `/stays/${stay.slug}/` }]}>
   <section class="wrap" style="padding-top:28px">
     <div class="row">
       <div style="flex:1 1 560px;min-width:0">
-        <p class="label" style="color:var(--leaf);margin-bottom:14px">{stay.kind} · {stay.region}, {stay.state}</p>
+        <p class="label" style="color:var(--leaf);margin-bottom:14px">{stay.property} · {stay.kind} · {stay.region}, {stay.state}</p>
         <h1 class="h-xl">{stay.tagline}</h1>
       </div>
       <p class="lead" style="flex:0 1 440px">{stay.summary}</p>
@@ -73,7 +74,7 @@ const jsonLd = [
             <div style="text-align:right">
               <p style="font-weight:700;font-size:19px">{r.priceWeek ? `₹${r.priceWeek.toLocaleString('en-IN')}` : 'Rates on request'}</p>
               <p class="muted" style="font-size:13px;margin-bottom:10px">{r.priceWeek ? 'per week' : 'see live prices'}</p>
-              <a class="btn small" href={u(`/book/?stay=${stay.slug}&room=${r.id}`)}>Choose</a>
+              <a class="btn small" href="#book">Check dates</a>
             </div>
           </div>
         ))}
@@ -97,18 +98,11 @@ const jsonLd = [
       <div>{stay.faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
     </div>
 
-    <aside style="flex:1 1 320px;min-width:0;position:sticky;top:96px" class="dark" >
+    <aside id="book" style="flex:1 1 320px;min-width:0;position:sticky;top:96px" class="dark">
       <div style="background:var(--ink);border-radius:26px;padding:28px" class="stack">
         <p class="label" style="color:var(--marigold)">Book direct · best rate</p>
         <p style="font-family:var(--display);font-weight:800;font-size:30px;line-height:1.05">{fromPrice ? `From ₹${fromPrice.toLocaleString('en-IN')} a week.` : 'Live prices and dates.'}</p>
-        <form action={u('/book/')} method="get" class="stack" style="--gap:12px">
-          <input type="hidden" name="stay" value={stay.slug} />
-          <label class="field"><span style="color:#B5AC9E">Arrive</span><input type="date" name="in" required /></label>
-          <label class="field"><span style="color:#B5AC9E">Stay for</span>
-            <select name="len"><option value="7">A week</option><option value="30">A month</option><option value="2">A weekend</option><option value="14">Two weeks</option></select>
-          </label>
-          <button class="btn yellow" type="submit" style="width:100%">Check availability</button>
-        </form>
+        <BookingBar preset={stay.slug} dark stacked />
         <p style="font-size:14px;color:#B5AC9E">Questions first? <a style="color:var(--marigold)" href={whatsappLink(`Hi! I'm thinking of staying at NomadGao ${stay.name}.`)} target="_blank" rel="noopener">WhatsApp the {stay.name} host</a></p>
       </div>
     </aside>

@@ -6,7 +6,7 @@ import { whatsappLink } from '../../data/site';
 import { u } from '../../lib/url';
 const events = await upcomingEvents();
 ---
-<Base title="Happenings: community events in Goa, Dharamkot and Lonavala" description="Hikes, chess club, games nights, meetups and workshops at NomadGao. See what is on this week and RSVP in one tap." crumbs={[{ name: 'Home', href: '/' }, { name: 'Happenings', href: '/happenings/' }]}>
+<Base title="Happenings: community events in Anjuna, Goa and Dharamkot, Himachal" description="Hikes, chess club, games nights, meetups and workshops at NomadGao. See what is on this week and RSVP in one tap." crumbs={[{ name: 'Home', href: '/' }, { name: 'Happenings', href: '/happenings/' }]}>
   <section class="wrap" style="padding:32px 0 24px">
     <div class="row">
       <div style="flex:1 1 560px">
@@ -21,7 +21,7 @@ const events = await upcomingEvents();
     </div>
   </section>
   <section class="wrap" style="padding-bottom:16px;display:flex;gap:10px;flex-wrap:wrap" aria-label="Filter by location">
-    {['All', 'Anjuna', 'Dharamkot', 'Lonavala'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
+    {['All', 'Anjuna', 'Dharamkot'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
   </section>
   <section class="wrap grid" style="--min:320px;padding:16px 0 64px" id="event-grid">
     {events.map((x) => <EventCard e={x.entry} next={x.next} />)}

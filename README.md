@@ -33,7 +33,7 @@ Optional repository variables (**Settings → Secrets and variables → Actions 
 
 | What | File |
 | --- | --- |
-| Contact details, WhatsApp number, navigation | `src/data/site.ts` |
+| Contact details, WhatsApp number, navigation, Stayflexi link format | `src/data/site.ts` |
 | Locations, rooms, prices, workspace facts, FAQs | `src/data/stays.ts` |
 | Blog posts (one Markdown file each) | `src/content/blog/` |
 | Events (weekly or one-off) | `src/content/events/` |
@@ -42,7 +42,7 @@ Optional repository variables (**Settings → Secrets and variables → Actions 
 | Photos | `public/images/`; pass `src` to `<Photo>` to replace a placeholder block |
 | Old URL → new URL map | `src/data/redirects.json` |
 
-Search the code for `TODO` to find facts that still need confirming, such as prices, Wi-Fi speeds, minimum stay, the Lonavala booking id and legal text.
+Search the code for `TODO` to find facts that still need confirming, such as prices, Wi-Fi speeds, minimum stay, Stayflexi link format and legal text.
 
 ### Add a blog post
 
@@ -103,9 +103,18 @@ You can also run `npm run import:wp -- --rest https://nomadgao.com`, which reads
 - **GitHub Pages:** each old URL gets a small page that forwards visitors to the new address straight away.
 - **Production (Vercel, Netlify or Cloudflare Pages):** run `node scripts/build-redirect-configs.mjs`. It writes `vercel.json` and `public/_redirects` with real 301s and security headers. Use one of these hosts when this site goes live on nomadgao.com; GitHub Pages can't send real 301s.
 
-## Booking flow
+## Booking flow (Stayflexi)
 
-`/book/` is a three-step wizard: pick a place, choose dates and a room, then review. At the end it sends the guest to `book.nomadgao.com` with the right `hotel_id`, or to WhatsApp with a pre-filled message. If the booking engine accepts dates in the URL, set the parameter names in `bookingParams` (`src/data/site.ts`) and they'll be filled in automatically. Every location page and the homepage booking bar feed into the wizard.
+There's one booking box: property, check-in, check-out and guests. It appears on the homepage, on each stay page and on `/book/`. "See rooms and prices" sends the guest **straight to the Stayflexi page for that property, with their dates and guest count in the link**, so they don't have to choose them again.
+
+- **Property ids:** set as `hotelId` in `src/data/stays.ts` (Villa Noma `23879`, Dharamkot `23727`).
+- **Link format:** Stayflexi doesn't publish the names its links use for dates and guests, so the site assumes format **A** (`?checkin=2026-12-10&checkout=2026-12-17&adults=2`). To confirm it:
+  1. Open `/book/link-test/` on the deployed preview (from your phone is fine).
+  2. Tap each option, A to I.
+  3. Note the one that opens Stayflexi with the dates and 3 guests already filled in.
+  4. Set `stayflexiFormat` in `src/data/site.ts` to that letter.
+- **If no option works:** ask Stayflexi support which URL parameters the booking engine accepts for check-in, check-out and adults, then add that format to `linkFormats`.
+- **Shareable links:** `/book/?stay=goa-anjuna&in=2026-12-10&out=2026-12-17&adults=2` forwards straight to Stayflexi. Use these in Instagram bios, WhatsApp replies and ads.
 
 ## Community: profiles, RSVPs and messages
 

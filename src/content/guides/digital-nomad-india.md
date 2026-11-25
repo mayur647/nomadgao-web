@@ -12,7 +12,6 @@ India rewards remote workers who slow down. Pick one or two bases, stay a month 
 
 - **Goa** for beaches, cafés, a large remote-work crowd from October to May, and quieter, greener monsoon months. Our [Anjuna stay](/stays/goa-anjuna/) sits a short ride from the beach.
 - **Himachal** for mountains, cooler summers and focus. [Dharamkot](/stays/dharamkot/) is a fifteen-minute walk above McLeodganj.
-- **Weekend escapes near Mumbai and Pune**, like [Lonavala](/stays/lonavala/), when you want a change of scene without a flight.
 
 ## Getting online
 

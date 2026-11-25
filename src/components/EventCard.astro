@@ -3,7 +3,7 @@ import type { EventEntry } from '../lib/events';
 import { u } from '../lib/url';
 interface Props { e: EventEntry; next: Date; compact?: boolean }
 const { e, next, compact = false } = Astro.props;
-const colors: Record<string, string> = { Anjuna: 'var(--clay)', Dharamkot: 'var(--slate)', Lonavala: 'var(--leaf)' };
+const colors: Record<string, string> = { Anjuna: 'var(--clay)', Dharamkot: 'var(--slate)' };
 const dateLabel = next.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' });
 ---
 <article class="card pinned" data-event={e.id} data-location={e.data.location} style="padding:0;overflow:hidden;display:flex;flex-direction:column">

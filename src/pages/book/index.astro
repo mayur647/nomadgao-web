@@ -1,165 +1,55 @@
 ---
 import Base from '../../layouts/Base.astro';
+import BookingBar from '../../components/BookingBar.astro';
 import { stays } from '../../data/stays';
-import { site } from '../../data/site';
+import { whatsappLink } from '../../data/site';
 import { u } from '../../lib/url';
-
-// Data the wizard needs on the client, kept small.
-const data = stays.map((s) => ({ slug: s.slug, name: s.name, state: s.state, kind: s.kind, hotelId: s.hotelId, color: s.color, rooms: s.rooms.map((r) => ({ id: r.id, name: r.name, house: r.house ?? '', sleeps: r.sleeps, priceWeek: r.priceWeek ?? null })) }));
 ---
-<Base title="Book a stay" description="Book a NomadGao stay in three steps: pick a place, choose dates and a room, then confirm on our secure booking page or with a host on WhatsApp." crumbs={[{ name: 'Home', href: '/' }, { name: 'Book', href: '/book/' }]}>
+<Base title="Book a stay" description="Book NomadGao Villa Noma in Anjuna, Goa or NomadGao Dharamkot, Himachal. Pick your dates and guests and see live rooms and prices." crumbs={[{ name: 'Home', href: '/' }, { name: 'Book', href: '/book/' }]}>
   <section class="wrap" style="padding:32px 0 96px;max-width:980px">
-    <p class="label" style="color:var(--leaf);margin-bottom:12px">Book direct · no booking fees</p>
+    <div id="handoff" hidden class="card" style="margin-bottom:32px">
+      <p class="label" style="color:var(--leaf)">One moment</p>
+      <p class="h-m" style="margin-top:8px">Taking you to live rooms and prices…</p>
+      <p class="muted" style="margin-top:8px">If nothing happens, <a id="handoff-link" href="#">tap here</a>.</p>
+    </div>
+    <p class="label" style="color:var(--leaf);margin-bottom:12px">Book direct · best rate · secure payment by Stayflexi</p>
     <h1 class="h-l">Book your stay</h1>
-    <ol class="label" id="steps" style="display:flex;gap:10px;flex-wrap:wrap;list-style:none;padding:0;margin:24px 0 32px">
-      <li data-step-label="1" class="chip" style="border:2px solid var(--ink)">1 · Where</li>
-      <li data-step-label="2" class="chip" style="border:2px solid var(--line)">2 · When and room</li>
-      <li data-step-label="3" class="chip" style="border:2px solid var(--line)">3 · Confirm</li>
-    </ol>
-
-    <form id="wizard" novalidate>
-      <fieldset data-step="1">
-        <legend class="h-m" style="margin-bottom:18px">Where do you want to stay?</legend>
-        <div class="grid" style="--min:240px;gap:16px">
-          {data.map((s) => (
-            <label class="card" style="cursor:pointer;display:block">
-              <input type="radio" name="stay" value={s.slug} style="width:auto;min-height:auto;margin-right:8px" required />
-              <span style="font-family:var(--display);font-weight:800;font-size:28px">{s.name}</span>
-              <span class="label" style="display:block;color:var(--leaf);margin-top:6px">{s.kind} · {s.state}</span>
-              <span aria-hidden="true" style={`display:block;height:8px;border-radius:4px;margin-top:14px;background:${s.color}`}></span>
-            </label>
-          ))}
+    <p class="lead muted" style="margin:16px 0 28px">Choose a place, your dates and how many of you. You will see the rooms and prices available for exactly those dates.</p>
+    <BookingBar />
+    <div class="grid" style="--min:260px;margin-top:48px">
+      {stays.map((s) => (
+        <div class="card">
+          <p class="label" style="color:var(--laterite)">{s.region}, {s.state}</p>
+          <p class="h-m" style="margin:8px 0">{s.property}</p>
+          <p class="muted" style="font-size:15px">{s.tagline}</p>
+          <p style="margin-top:12px"><a href={u(`/stays/${s.slug}/`)}>About this stay →</a></p>
         </div>
-        <p style="margin-top:24px"><button type="button" class="btn" data-next>Next: dates</button></p>
-      </fieldset>
-
-      <fieldset data-step="2" hidden>
-        <legend class="h-m" style="margin-bottom:18px">When, who and which room?</legend>
-        <div class="grid" style="--min:200px;gap:16px">
-          <label class="field"><span>Arrive</span><input type="date" name="in" required /></label>
-          <label class="field"><span>Leave</span><input type="date" name="out" required /></label>
-          <label class="field"><span>Guests</span><select name="guests"><option>1</option><option>2</option><option value="3">3 or more</option></select></label>
-        </div>
-        <p id="nights" class="muted" style="margin-top:10px" aria-live="polite"></p>
-        <div id="rooms" class="stack" style="margin-top:24px" role="radiogroup" aria-label="Room"></div>
-        <label class="field" style="margin-top:24px"><span>Anything we should know? (optional)</span><textarea name="note" maxlength="400" placeholder="Working hours, dietary needs, arriving late, bringing a team…"></textarea></label>
-        <p id="err2" class="muted" style="color:var(--laterite);margin-top:12px" role="alert"></p>
-        <p style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn ghost" data-back>Back</button><button type="button" class="btn" data-next>Review</button></p>
-      </fieldset>
-
-      <fieldset data-step="3" hidden>
-        <legend class="h-m" style="margin-bottom:18px">Check and confirm</legend>
-        <div class="card" id="summary" style="font-size:18px"></div>
-        <div class="grid" style="--min:260px;margin-top:24px">
-          <div class="stack" style="--gap:10px">
-            <a id="go-book" class="btn red" href={site.bookingBase} target="_blank" rel="noopener" style="width:100%">Continue to secure booking</a>
-            <p class="muted" style="font-size:14px">Opens our booking page with live prices and secure payment. Pick the same dates there.</p>
-          </div>
-          <div class="stack" style="--gap:10px">
-            <a id="go-wa" class="btn ghost" href="#" target="_blank" rel="noopener" style="width:100%">Ask a host on WhatsApp</a>
-            <p class="muted" style="font-size:14px">For long stays, teams or anything unusual. We usually reply within a few hours.</p>
-          </div>
-        </div>
-        <p style="margin-top:24px"><button type="button" class="btn ghost small" data-back>Change details</button></p>
-      </fieldset>
-    </form>
-
-    <div class="sand" style="border-radius:22px;padding:22px;margin-top:48px">
-      <p style="font-weight:600">After you book</p>
-      <p class="muted">You get a sign-in link for <a href={u('/village/')}>The Village</a>: make a profile, RSVP to events and see who else is around before you arrive.</p>
+      ))}
+      <div class="sand" style="border-radius:var(--r);padding:22px">
+        <p style="font-weight:600">Long stay, team or a question first?</p>
+        <p class="muted" style="margin:6px 0 14px;font-size:15px">A host will sort it out on WhatsApp, usually within a few hours.</p>
+        <a class="btn ghost small" href={whatsappLink('Hi NomadGao! I would like to ask about a stay.')} target="_blank" rel="noopener">WhatsApp a host</a>
+      </div>
     </div>
   </section>
-  <script type="application/json" id="stay-data" set:html={JSON.stringify({ stays: data, wa: site.whatsapp })}></script>
 </Base>
 <script>
-  import { bookingUrl } from '../../data/site';
-  type R = { id: string; name: string; house: string; sleeps: number; priceWeek: number | null };
-  type S = { slug: string; name: string; state: string; kind: string; hotelId: string | null; rooms: R[] };
-  const { stays, wa } = JSON.parse(document.getElementById('stay-data')!.textContent!) as { stays: S[]; wa: string };
-  const form = document.getElementById('wizard') as HTMLFormElement;
-  const steps = [...form.querySelectorAll<HTMLFieldSetElement>('[data-step]')];
-  const labels = [...document.querySelectorAll<HTMLElement>('[data-step-label]')];
+  // Arriving with ?stay=&in=&out=&adults= (links, or the booking box without JS): go straight to Stayflexi.
+  import { validate, linkFor } from '../../scripts/booking';
   const q = new URLSearchParams(location.search);
-  const iso = (d: Date) => d.toISOString().slice(0, 10);
-  const today = iso(new Date());
-  const inEl = form.elements.namedItem('in') as HTMLInputElement;
-  const outEl = form.elements.namedItem('out') as HTMLInputElement;
-  inEl.min = today; outEl.min = today;
-  let step = 1;
-
-  const stay = () => stays.find((s) => s.slug === (form.elements.namedItem('stay') as RadioNodeList).value);
-  const nights = () => (inEl.value && outEl.value ? Math.round((+new Date(outEl.value) - +new Date(inEl.value)) / 86400000) : 0);
-  const fmt = (v: string) => new Date(v).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-
-  function renderRooms() {
-    const s = stay(); const box = document.getElementById('rooms')!;
-    if (!s) { box.innerHTML = ''; return; }
-    const want = q.get('room');
-    box.innerHTML = s.rooms.map((r, i) => `
-      <label class="card" style="display:flex;gap:14px;align-items:center;cursor:pointer;padding:16px">
-        <input type="radio" name="room" value="${r.id}" ${want === r.id || (!want && i === 0) ? 'checked' : ''} style="width:auto;min-height:auto" />
-        <span style="flex:1"><strong>${r.name}</strong><br><span class="muted" style="font-size:14px">${r.house ? r.house + ' · ' : ''}sleeps ${r.sleeps}</span></span>
-        <span style="font-weight:600">${r.priceWeek ? '₹' + r.priceWeek.toLocaleString('en-IN') + '/wk' : 'Live price'}</span>
-      </label>`).join('');
+  const stay = q.get('stay') ?? '', checkIn = q.get('in') ?? '', checkOut = q.get('out') ?? '';
+  const adults = Math.min(Math.max(Number(q.get('adults')) || 2, 1), 12);
+  const form = document.querySelector<HTMLFormElement>('[data-booking-form]');
+  if (form) {
+    const set = (n: string, v: string) => { const el = form.elements.namedItem(n) as HTMLInputElement | null; if (el && v) el.value = v; };
+    set('stay', stay); set('in', checkIn); set('out', checkOut); set('adults', String(adults));
   }
-  function show(n: number) {
-    step = n;
-    steps.forEach((f) => (f.hidden = f.dataset.step !== String(n)));
-    labels.forEach((l) => (l.style.borderColor = Number(l.dataset.stepLabel) <= n ? 'var(--ink)' : 'var(--line)'));
-    if (n === 2) renderRooms();
-    if (n === 3) renderSummary();
-    steps[n - 1].querySelector<HTMLElement>('legend')?.focus?.();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  function renderSummary() {
-    const s = stay()!; const roomId = (form.elements.namedItem('room') as RadioNodeList)?.value;
-    const r = s.rooms.find((x) => x.id === roomId) ?? s.rooms[0];
-    const guests = (form.elements.namedItem('guests') as HTMLSelectElement).value;
-    const note = (form.elements.namedItem('note') as HTMLTextAreaElement).value.trim();
-    const n = nights();
-    const el = document.getElementById('summary')!;
-    el.textContent = '';
-    const lines: [string, string][] = [['Stay', `NomadGao ${s.name}, ${s.state}`], ['Room', r.name], ['Dates', `${fmt(inEl.value)} → ${fmt(outEl.value)} (${n} night${n === 1 ? '' : 's'})`], ['Guests', guests === '3' ? '3 or more' : guests]];
-    if (note) lines.push(['Note', note]);
-    for (const [k, v] of lines) {
-      const p = document.createElement('p'); p.style.margin = '6px 0';
-      const b = document.createElement('span'); b.className = 'label'; b.style.cssText = 'display:inline-block;width:90px;color:var(--ink-3)'; b.textContent = k;
-      p.append(b, document.createTextNode(v)); el.append(p);
+  if (stay && !validate(stay, checkIn, checkOut)) {
+    const url = linkFor(stay, checkIn, checkOut, adults);
+    if (url) {
+      document.getElementById('handoff')!.hidden = false;
+      (document.getElementById('handoff-link') as HTMLAnchorElement).href = url;
+      location.replace(url);
     }
-    const book = document.getElementById('go-book') as HTMLAnchorElement;
-    if (s.hotelId) { book.href = bookingUrl(s.hotelId, inEl.value, outEl.value, Number(guests)); book.hidden = false; }
-    else book.hidden = true;
-    const msg = `Hi NomadGao! I'd like to book ${s.name}: ${r.name}, ${fmt(inEl.value)} to ${fmt(outEl.value)} (${n} nights), ${guests === '3' ? '3+' : guests} guest(s).${note ? ' Note: ' + note : ''}`;
-    (document.getElementById('go-wa') as HTMLAnchorElement).href = `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`;
   }
-  function validate(n: number): boolean {
-    if (n === 1 && !stay()) { alertMsg('Pick a place first.'); return false; }
-    if (n === 2) {
-      const err = document.getElementById('err2')!; err.textContent = '';
-      if (!inEl.value || !outEl.value) { err.textContent = 'Choose both dates.'; return false; }
-      if (inEl.value < today) { err.textContent = 'Arrival cannot be in the past.'; return false; }
-      if (nights() < 1) { err.textContent = 'Leave date must be after your arrival.'; return false; }
-    }
-    return true;
-  }
-  function alertMsg(t: string) { const p = document.createElement('p'); p.setAttribute('role', 'alert'); p.style.color = 'var(--laterite)'; p.textContent = t; steps[0].append(p); setTimeout(() => p.remove(), 3000); }
-
-  form.addEventListener('click', (e) => {
-    const t = e.target as HTMLElement;
-    if (t.matches('[data-next]') && validate(step)) show(step + 1);
-    if (t.matches('[data-back]')) show(step - 1);
-  });
-  const updateNights = () => { const n = nights(); document.getElementById('nights')!.textContent = n > 0 ? `${n} night${n === 1 ? '' : 's'}${n >= 28 ? ' · monthly rates apply' : n >= 7 ? ' · weekly rates apply' : ''}` : ''; if (inEl.value) outEl.min = inEl.value; };
-  inEl.addEventListener('change', updateNights); outEl.addEventListener('change', updateNights);
-  form.addEventListener('submit', (e) => e.preventDefault());
-
-  // Prefill from ?stay=&in=&len=&room=
-  const pre = q.get('stay');
-  if (pre) { const radio = form.querySelector<HTMLInputElement>(`input[name="stay"][value="${CSS.escape(pre)}"]`); if (radio) radio.checked = true; }
-  if (q.get('in') && q.get('in')! >= today) {
-    inEl.value = q.get('in')!;
-    const len = Number(q.get('len') || 7); const d = new Date(inEl.value); d.setDate(d.getDate() + (len > 0 && len < 400 ? len : 7)); outEl.value = iso(d);
-    updateNights();
-  }
-  show(stay() ? 2 : 1);
 </script>

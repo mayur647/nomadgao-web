@@ -3,9 +3,9 @@ import Base from '../../layouts/Base.astro';
 import StayCard from '../../components/StayCard.astro';
 import { stays } from '../../data/stays';
 ---
-<Base title="Stays: coliving and coworking in Goa, Himachal and Lonavala" description="Compare NomadGao stays in Anjuna (Goa), Dharamkot (Himachal) and Lonavala (Maharashtra): rooms, dorms, coworking and community events." crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }]}>
+<Base title="Stays: coliving and coworking in Goa and Himachal" description="Compare NomadGao Villa Noma in Anjuna, Goa and NomadGao Dharamkot in Himachal: rooms, coworking, seasons and community events." crumbs={[{ name: 'Home', href: '/' }, { name: 'Stays', href: '/stays/' }]}>
   <section class="wrap section">
-    <p class="label" style="color:var(--leaf);margin-bottom:14px">Three villages, one standard</p>
+    <p class="label" style="color:var(--leaf);margin-bottom:14px">Two villages, one standard</p>
     <h1 class="h-xl">Where do you want to wake up?</h1>
     <p class="lead muted" style="margin-top:20px">Every NomadGao stay has a real workspace, backup power and a weekly calendar of things to do with the people around you.</p>
     <div class="grid" style="--min:300px;margin-top:48px">{stays.map((s) => <StayCard stay={s} />)}</div>

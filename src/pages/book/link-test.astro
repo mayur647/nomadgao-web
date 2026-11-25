@@ -1,0 +1,46 @@
+---
+// Staff tool: find which link format makes Stayflexi pre-fill dates and guests.
+import Base from '../../layouts/Base.astro';
+import { stays } from '../../data/stays';
+import { linkFormats, stayflexiFormat } from '../../data/site';
+---
+<Base title="Stayflexi link test" description="Internal tool for testing Stayflexi booking links with dates and guests filled in." noindex>
+  <section class="wrap" style="padding:32px 0 96px;max-width:860px">
+    <p class="label" style="color:var(--laterite)">Staff only · not linked anywhere</p>
+    <h1 class="h-l" style="margin-top:10px">Which link does Stayflexi understand?</h1>
+    <ol class="lead muted" style="margin:18px 0 28px;padding-left:22px">
+      <li>Tap each option below. Each one opens your Stayflexi page in a new tab.</li>
+      <li>Look for the one that opens with <strong>these dates and 3 guests already filled in</strong>.</li>
+      <li>Set <code>stayflexiFormat</code> in <code>src/data/site.ts</code> to that letter (now: <strong>{stayflexiFormat ?? 'none'}</strong>).</li>
+    </ol>
+    <div class="grid" style="--min:200px;gap:14px">
+      <label class="field"><span>Property</span><select id="t-stay">{stays.filter((s) => s.hotelId).map((s) => <option value={s.hotelId!}>{s.property}</option>)}</select></label>
+      <label class="field"><span>Check-in</span><input id="t-in" type="date" /></label>
+      <label class="field"><span>Check-out</span><input id="t-out" type="date" /></label>
+    </div>
+    <div id="t-links" class="stack" style="margin-top:28px">
+      {Object.entries(linkFormats).map(([k, f]) => (
+        <a class="card" data-format={k} href="#" target="_blank" rel="noopener" style="display:flex;gap:16px;align-items:center;text-decoration:none">
+          <span style="font-family:var(--display);font-weight:800;font-size:34px;width:40px">{k}</span>
+          <span style="flex:1"><strong>{f.label}</strong><br /><code class="muted" style="font-size:12px;word-break:break-all" data-url></code></span>
+        </a>
+      ))}
+    </div>
+    <p class="muted" style="margin-top:28px">None of them work? Ask Stayflexi support: <em>"What URL parameters does our booking engine accept for check-in date, check-out date and number of adults?"</em> Then add their format to <code>linkFormats</code>.</p>
+  </section>
+</Base>
+<script>
+  import { bookingUrl } from '../../data/site';
+  const iso = (d: Date) => d.toISOString().slice(0, 10);
+  const inEl = document.getElementById('t-in') as HTMLInputElement;
+  const outEl = document.getElementById('t-out') as HTMLInputElement;
+  const stayEl = document.getElementById('t-stay') as HTMLSelectElement;
+  const a = new Date(); a.setDate(a.getDate() + 21); inEl.value = iso(a);
+  const b = new Date(a); b.setDate(b.getDate() + 5); outEl.value = iso(b);
+  const paint = () => document.querySelectorAll<HTMLAnchorElement>('[data-format]').forEach((el) => {
+    const url = bookingUrl(stayEl.value, inEl.value, outEl.value, 3, el.dataset.format);
+    el.href = url; el.querySelector('[data-url]')!.textContent = url;
+  });
+  [inEl, outEl, stayEl].forEach((el) => el.addEventListener('change', paint));
+  paint();
+</script>

@@ -14,6 +14,7 @@ export type Room = {
 export type Stay = {
   slug: string;
   name: string;
+  property: string;
   region: string;
   state: string;
   kind: string;
@@ -34,17 +35,19 @@ export const stays: Stay[] = [
   {
     slug: 'goa-anjuna',
     name: 'Anjuna',
+    property: 'NomadGao Villa Noma',
     region: 'North Goa',
     state: 'Goa',
     kind: 'Coliving + coworking',
     tagline: 'Anjuna, but make it work.',
     summary:
-      'Two houses a short ride from Anjuna beach. Vila Nova has fifteen private rooms and the main coworking space; Secret Garden is quieter and leafier. Desks under mango trees, a rooftop, and people who would like to grab dinner.',
+      'Villa Noma is our home in Anjuna, a short ride from the beach: private rooms, a coworking space with desks under the trees and a rooftop, and people who would like to grab dinner.',
     hotelId: '23879',
     color: 'var(--clay)',
     facts: [
-      { label: 'Rooms', value: '15 at Vila Nova + Secret Garden' },
-      { label: 'Beach', value: 'About 1.8 km to Anjuna beach' },
+      { label: 'Property', value: 'Villa Noma' },
+      { label: 'Rooms', value: 'Private rooms (TODO: count)' },
+      { label: 'Beach', value: 'A short scooter ride to Anjuna beach' },
       { label: 'Best for', value: 'Solo stays, couples, team offsites' },
       { label: 'Season', value: 'October to May; monsoon rates June to September' },
     ],
@@ -61,13 +64,13 @@ export const stays: Stay[] = [
       { day: 'Sunday', what: 'Group hike with a local guide' },
     ],
     rooms: [
-      { id: 'vn-garden', name: 'Private room, garden view', house: 'Vila Nova', sleeps: 2, features: ['AC', 'Private bathroom', 'Balcony', 'Coworking access'] },
-      { id: 'sg-private', name: 'Private room', house: 'Secret Garden', sleeps: 2, features: ['Shared kitchen', 'Garden desks', 'Coworking access'] },
+      // TODO: match these to the room types set up in Stayflexi
+      { id: 'vn-private', name: 'Private room', house: 'Villa Noma', sleeps: 2, features: ['Private bathroom', 'Coworking access'] },
     ],
     gettingThere: [
       'Manohar International Airport (Mopa) is the closest airport, roughly 45 to 60 minutes by taxi. (TODO: check)',
       'Dabolim airport is about 1 hour 15 minutes by taxi.',
-      'Thivim is the nearest railway station, about 25 minutes away.',
+      'Thivim is the nearest railway station, roughly 25 minutes away.',
       'Rent a scooter for getting around; we can connect you with a trusted rental.',
     ],
     faqs: [
@@ -79,6 +82,7 @@ export const stays: Stay[] = [
   {
     slug: 'dharamkot',
     name: 'Dharamkot',
+    property: 'NomadGao Dharamkot',
     region: 'Dharamshala',
     state: 'Himachal Pradesh',
     kind: 'Boutique coliving + rooftop coworking',
@@ -118,48 +122,6 @@ export const stays: Stay[] = [
     faqs: [
       { q: 'Is it cold?', a: 'Winters (December to February) are cold and can bring snow. Rooms have bedding for it; bring layers.' },
       { q: 'Can I walk to McLeodganj?', a: 'Yes, it is about a fifteen-minute walk.' },
-    ],
-  },
-  {
-    slug: 'lonavala',
-    name: 'Lonavala',
-    region: 'Sahyadri hills',
-    state: 'Maharashtra',
-    kind: 'Workation hostel',
-    tagline: 'A weekend escape that still has a desk.',
-    summary:
-      'Our social hostel in the Sahyadris, a short drive from Mumbai and Pune. Dorms, a female-only dorm, private rooms, a pool and a work lounge. Come for a weekend, stay for the week.',
-    hotelId: null, // TODO: booking id for Lonavala
-    color: 'var(--leaf)',
-    facts: [
-      { label: 'Beds', value: 'Dorms, female-only dorm, private rooms' },
-      { label: 'Pool', value: 'Yes' },
-      { label: 'From Mumbai / Pune', value: 'A short drive or train ride' },
-      { label: 'Best for', value: 'Weekends, first workations, groups' },
-    ],
-    workspace: [
-      { title: 'Work lounge', text: 'Desks and plug points away from the social area.' },
-      { title: 'Wi-Fi', text: 'Speed: TODO Mbps.' },
-      { title: 'Board games and movies', text: 'For when the laptop closes.' },
-      { title: 'Pool', text: 'The best meeting room in the monsoon.' },
-    ],
-    week: [
-      { day: 'Wednesday', what: 'Community meetup with dinner' },
-      { day: 'Saturday', what: 'Monsoon trek or sunset walk' },
-    ],
-    rooms: [
-      { id: 'ln-dorm', name: 'Bed in mixed dorm', sleeps: 1, features: ['Locker', 'Reading light', 'Lounge access'] },
-      { id: 'ln-fdorm', name: 'Bed in female-only dorm', sleeps: 1, features: ['Locker', 'Reading light', 'Lounge access'] },
-      { id: 'ln-private', name: 'Private room', sleeps: 2, features: ['Private bathroom', 'Lounge access'] },
-    ],
-    gettingThere: [
-      'Lonavala station is on the Mumbai to Pune line.',
-      'By road it is on the Mumbai to Pune expressway.',
-      'Address: opposite Lodha Gold Crest, Gharkul Society, Valvan, Lonavala.',
-    ],
-    faqs: [
-      { q: 'Is there a female-only dorm?', a: 'Yes.' },
-      { q: 'Can I bring my team?', a: 'Yes. Groups can book out a dorm or the whole property. Ask on WhatsApp.' },
     ],
   },
 ];

@@ -28,7 +28,7 @@ const events = (await getCollection('events')).map((e) => ({ id: e.id, title: e.
           <label class="field"><span>Name people call you *</span><input name="display_name" maxlength="40" required /></label>
           <label class="field"><span>What you do</span><input name="role" maxlength="60" placeholder="Product designer, founder, student…" /></label>
           <label class="field"><span>Home city</span><input name="home_city" maxlength="40" /></label>
-          <label class="field"><span>Where you are staying</span><select name="location"><option value="">Not booked yet</option><option>Anjuna</option><option>Dharamkot</option><option>Lonavala</option></select></label>
+          <label class="field"><span>Where you are staying</span><select name="location"><option value="">Not booked yet</option><option>Anjuna</option><option>Dharamkot</option></select></label>
           <label class="field"><span>From</span><input type="date" name="stay_from" /></label>
           <label class="field"><span>Until</span><input type="date" name="stay_to" /></label>
         </div>

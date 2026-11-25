@@ -33,7 +33,7 @@ create table if not exists public.profiles (
   display_name text not null check (char_length(display_name) between 1 and 40),
   role text default '' check (char_length(role) <= 60),
   home_city text default '' check (char_length(home_city) <= 40),
-  location text default '' check (location in ('', 'Anjuna', 'Dharamkot', 'Lonavala')),
+  location text default '' check (location in ('', 'Anjuna', 'Dharamkot')),
   stay_from date,
   stay_to date,
   show_dates boolean not null default true,

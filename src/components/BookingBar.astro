@@ -1,22 +1,27 @@
 ---
+// One booking box used on the homepage, location pages and /book/.
+// With JavaScript it sends guests straight to Stayflexi with their dates and
+// guests filled in. Without JavaScript it falls back to /book/, which does the same.
 import { stays } from '../data/stays';
 import { u } from '../lib/url';
-interface Props { preset?: string }
-const { preset } = Astro.props;
+interface Props { preset?: string; dark?: boolean; stacked?: boolean }
+const { preset, dark = false, stacked = false } = Astro.props;
+const cell = stacked ? 'padding:12px 16px;border-bottom:1px solid var(--line)' : 'flex:1 1 150px;padding:12px 18px;border-right:1px solid var(--line)';
+const plain = 'border:0;padding:4px 0;min-height:auto;font-weight:600;background:transparent;color:inherit';
 ---
-<form action={u('/book/')} method="get" class="bookbar" style="display:flex;flex-wrap:wrap;background:var(--white);border:2px solid var(--ink);border-radius:20px;overflow:hidden;max-width:760px">
-  <label class="field" style="flex:1 1 180px;padding:12px 18px;border-right:1px solid var(--line)"><span>Where</span>
-    <select name="stay" style="border:0;padding:4px 0;min-height:auto;font-weight:600">
-      {stays.map((s) => <option value={s.slug} selected={s.slug === preset}>{s.name}, {s.state}</option>)}
-    </select>
+<form action={u('/book/')} method="get" data-booking-form class="bookbar"
+  style={`display:flex;flex-wrap:wrap;${stacked ? 'flex-direction:column;' : ''}background:${dark ? 'transparent' : 'var(--white)'};border:2px solid ${dark ? '#4A443B' : 'var(--ink)'};border-radius:20px;overflow:hidden;max-width:${stacked ? '100%' : '880px'}`}>
+  {preset ? <input type="hidden" name="stay" value={preset} /> : (
+    <label class="field" style={cell}><span>Where</span>
+      <select name="stay" style={plain}>{stays.map((s) => <option value={s.slug}>{s.property.replace('NomadGao ', '')}, {s.name}</option>)}</select>
+    </label>
+  )}
+  <label class="field" style={cell}><span>Check-in</span><input type="date" name="in" required style={plain} /></label>
+  <label class="field" style={cell}><span>Check-out</span><input type="date" name="out" required style={plain} /></label>
+  <label class="field" style={stacked ? 'padding:12px 16px' : 'flex:0 1 120px;padding:12px 18px'}><span>Guests</span>
+    <select name="adults" style={plain}><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
   </label>
-  <label class="field" style="flex:1 1 150px;padding:12px 18px;border-right:1px solid var(--line)"><span>Arrive</span>
-    <input type="date" name="in" required style="border:0;padding:4px 0;min-height:auto;font-weight:600" />
-  </label>
-  <label class="field" style="flex:1 1 150px;padding:12px 18px"><span>Stay for</span>
-    <select name="len" style="border:0;padding:4px 0;min-height:auto;font-weight:600">
-      <option value="7">A week</option><option value="30">A month</option><option value="2">A weekend</option><option value="14">Two weeks</option>
-    </select>
-  </label>
-  <button class="btn" type="submit" style="border-radius:0;min-height:68px;flex:1 0 auto">Check dates</button>
+  <button class={`btn ${dark ? 'yellow' : ''}`} type="submit" style={`border-radius:0;min-height:${stacked ? '56px' : '72px'};flex:1 0 auto;border-width:0`}>See rooms and prices</button>
+  <p data-booking-error role="alert" class="label" style="flex-basis:100%;margin:0;padding:0 18px;color:var(--laterite)"></p>
 </form>
+<script>import '../scripts/booking';</script>

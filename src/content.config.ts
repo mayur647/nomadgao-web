@@ -27,7 +27,7 @@ const blog = defineCollection({
     coverAlt: z.string().optional(),
     takeaways: z.array(z.string()).optional(),
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
-    relatedStay: z.enum(['goa-anjuna', 'dharamkot', 'lonavala']).optional(),
+    relatedStay: z.enum(['goa-anjuna', 'dharamkot']).optional(),
     // Migration bookkeeping
     legacyPath: z.string().optional(),
     imported: z.boolean().default(true),
@@ -39,7 +39,7 @@ const events = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
   schema: z.object({
     title: z.string(),
-    location: z.enum(['Anjuna', 'Dharamkot', 'Lonavala']),
+    location: z.enum(['Anjuna', 'Dharamkot']),
     kind: z.enum(['Weekly', 'Outdoors', 'Social', 'Workshop', 'Talk', 'Screening']),
     recurring: z.boolean().default(false),
     when: z.string(), // human label, e.g. "Wed · 6:00 pm"
@@ -60,7 +60,7 @@ const guides = defineCollection({
     region: z.string(),
     order: z.number().default(0),
     updatedDate: z.coerce.date(),
-    relatedStay: z.enum(['goa-anjuna', 'dharamkot', 'lonavala']).optional(),
+    relatedStay: z.enum(['goa-anjuna', 'dharamkot']).optional(),
   }),
 });
 

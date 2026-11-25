@@ -13,7 +13,7 @@ export type Profile = {
   display_name: string;
   role: string;
   home_city: string;
-  location: 'Anjuna' | 'Dharamkot' | 'Lonavala' | '';
+  location: 'Anjuna' | 'Dharamkot' | '';
   stay_from: string | null;
   stay_to: string | null;
   show_dates: boolean;
@@ -44,7 +44,7 @@ const SAMPLE: Profile[] = [
   { id: 's1', display_name: 'Aditi', role: 'Product designer', home_city: 'Pune', location: 'Anjuna', stay_from: null, stay_to: null, show_dates: false, open_to: 'surf buddies, portfolio crits', skills: ['Figma', 'Branding'], bio: 'Freelance designer for early-stage startups. Here for a month to finish a rebrand.', visible: true },
   { id: 's2', display_name: 'Jonas', role: 'Backend engineer', home_city: 'Berlin', location: 'Dharamkot', stay_from: null, stay_to: null, show_dates: false, open_to: 'hikes, chess', skills: ['Go', 'Rust'], bio: 'Remote for a fintech. First time in India, staying for the mountains.', visible: true },
   { id: 's3', display_name: 'Meera', role: 'Founder', home_city: 'Bengaluru', location: 'Anjuna', stay_from: null, stay_to: null, show_dates: false, open_to: 'hiring chats', skills: ['Fundraising', 'Ops'], bio: 'Brought a six-person team for a planning week.', visible: true },
-  { id: 's4', display_name: 'Rohan', role: 'Content creator', home_city: 'Mumbai', location: 'Lonavala', stay_from: null, stay_to: null, show_dates: false, open_to: 'collabs, monsoon treks', skills: ['Video', 'Reels'], bio: 'Makes travel videos on weekdays, escapes the city on weekends.', visible: true },
+  { id: 's4', display_name: 'Rohan', role: 'Content creator', home_city: 'Mumbai', location: 'Anjuna', stay_from: null, stay_to: null, show_dates: false, open_to: 'collabs, sunset rides', skills: ['Video', 'Reels'], bio: 'Makes travel videos. In Goa for the season.', visible: true },
   { id: 's5', display_name: 'Sara', role: 'UX researcher', home_city: 'Lisbon', location: 'Dharamkot', stay_from: null, stay_to: null, show_dates: false, open_to: 'sunrise yoga, book swaps', skills: ['Research', 'Interviews'], bio: 'Slow-travelling through India for a season.', visible: true },
 ];
 const SEED_COUNTS: Record<string, number> = {};

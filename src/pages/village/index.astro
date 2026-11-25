@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { u } from '../../lib/url';
 ---
-<Base title="The Village: meet NomadGao members" description="Member profiles for NomadGao guests and Passport holders. See who is in Goa, Dharamkot or Lonavala, what they do and what they are open to." noindex crumbs={[{ name: 'Home', href: '/' }, { name: 'The Village', href: '/village/' }]}>
+<Base title="The Village: meet NomadGao members" description="Member profiles for NomadGao guests and Passport holders. See who is in Anjuna or Dharamkot, what they do and what they are open to." noindex crumbs={[{ name: 'Home', href: '/' }, { name: 'The Village', href: '/village/' }]}>
   <section class="wrap" style="padding:32px 0 24px">
     <div class="row">
       <div style="flex:1 1 560px"><p class="label" style="color:var(--leaf);margin-bottom:14px">The Village · members only</p><h1 class="h-xl">Find your people<br />before check&#8209;in.</h1></div>
@@ -14,7 +14,7 @@ import { u } from '../../lib/url';
   </section>
   <p id="demo-note" class="wrap label muted" hidden>Demo mode: sample profiles, and your own profile is saved only in this browser.</p>
   <section class="wrap" style="display:flex;gap:10px;flex-wrap:wrap;padding:16px 0" aria-label="Filter by location">
-    {['All', 'Anjuna', 'Dharamkot', 'Lonavala'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
+    {['All', 'Anjuna', 'Dharamkot'].map((l, i) => <button type="button" class={`btn small ${i ? 'ghost' : ''}`} data-filter={l} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
     <label class="field" style="flex:1 1 220px;max-width:320px;margin-left:auto"><span class="visually-hidden">Search skills or interests</span><input type="search" id="q" placeholder="Search: chess, design, surfing…" /></label>
   </section>
   <section class="wrap" style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;padding-bottom:96px">
@@ -31,7 +31,7 @@ import { u } from '../../lib/url';
 </Base>
 <script>
   import { listProfiles, currentUser, sayHi, isDemo, toast, esc, loginUrl, type Profile } from '../../scripts/community';
-  const colors: Record<string, string> = { Anjuna: '#C9792F', Dharamkot: '#3E5C76', Lonavala: '#1F5A3D', '': '#6B6358' };
+  const colors: Record<string, string> = { Anjuna: '#C9792F', Dharamkot: '#3E5C76', '': '#6B6358' };
   const peopleEl = document.getElementById('people')!;
   const detail = document.getElementById('detail')!;
   let all: Profile[] = []; let filter = 'All'; let query = '';

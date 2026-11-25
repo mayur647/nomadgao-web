@@ -10,7 +10,8 @@ const { stay } = Astro.props;
     <Photo caption={`${stay.name}, ${stay.region}`} color={stay.color} height="360px" />
     <span class="chip" style="position:absolute;top:16px;left:16px">{stay.kind}</span>
   </div>
-  <h3 class="h-m" style="margin:18px 0 6px">{stay.name}</h3>
+  <p class="label" style="margin-top:18px;color:var(--leaf)">{stay.property}</p>
+  <h3 class="h-m" style="margin:6px 0">{stay.name}, {stay.state}</h3>
   <p class="muted">{stay.summary.split('. ')[0]}.</p>
   <p style="margin-top:10px;font-weight:600">See rooms and dates →</p>
 </a>
