@@ -21,6 +21,7 @@ export type Stay = {
   tagline: string;
   summary: string;
   hotelId: string | null; // id on book.nomadgao.com
+  pmsId: string; // property id in our own PMS (supabase/pms.sql)
   color: string;
   facts: { label: string; value: string }[];
   workspace: { title: string; text: string }[];
@@ -43,6 +44,7 @@ export const stays: Stay[] = [
     summary:
       'Vila Nova is our home in Anjuna, a short ride from the beach: twelve private rooms, a coworking space with desks under the trees and a rooftop, and people who would like to grab dinner.',
     hotelId: '23879',
+    pmsId: 'vila-nova',
     color: 'var(--clay)',
     facts: [
       { label: 'Property', value: 'Vila Nova' },
@@ -90,6 +92,7 @@ export const stays: Stay[] = [
     summary:
       'Twelve private rooms at about 2,100 metres in the Dhauladhar range, a rooftop coworking space, and McLeodganj a fifteen-minute walk away. Cafés, trails and a lot of very calm mornings.',
     hotelId: '23727',
+    pmsId: 'dharamkot',
     color: 'var(--slate)',
     facts: [
       { label: 'Rooms', value: '12 private rooms' },

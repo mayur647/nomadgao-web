@@ -1,0 +1,138 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="NomadGao PMS" description="Staff property management: arrivals, departures, rates, availability and reservations." noindex>
+  <section class="wrap" style="padding:20px 0 80px">
+    <div id="pms-login" hidden class="card stack" style="max-width:460px;margin:40px auto">
+      <p class="label" style="color:var(--laterite)">Staff only</p>
+      <h1 class="h-m">NomadGao PMS</h1>
+      <form id="pms-login-form" class="stack" style="--gap:12px">
+        <label class="field"><span>Staff email</span><input type="email" name="email" required autocomplete="email" /></label>
+        <button class="btn red" type="submit">Sign in</button>
+        <p id="pms-login-msg" class="muted" role="status"></p>
+      </form>
+    </div>
+
+    <div id="pms-app" hidden>
+      <div class="row" style="align-items:center;margin-bottom:14px">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <h1 class="h-m" style="font-size:30px">PMS</h1>
+          <label class="field" style="min-width:220px"><span class="visually-hidden">Property</span><select id="pms-property"></select></label>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span id="pms-who" class="label muted"></span><button id="pms-signout" class="btn ghost small" type="button">Sign out</button></div>
+      </div>
+      <p id="pms-demo" hidden class="notice" style="border-radius:12px;text-align:left;margin-bottom:14px">Demo mode: sample rooms, rates and bookings stored in this browser only. <button id="pms-reset" type="button" class="btn small ghost" style="margin-left:8px;min-height:36px">Reset demo data</button></p>
+      <nav class="pms-tabs" role="tablist" aria-label="PMS sections">
+        <button role="tab" data-tab="today" aria-selected="true">Today</button>
+        <button role="tab" data-tab="calendar" aria-selected="false">Rates &amp; availability</button>
+        <button role="tab" data-tab="reservations" aria-selected="false">Reservations</button>
+        <button role="tab" data-tab="new" aria-selected="false">New booking</button>
+        <button role="tab" data-tab="channels" aria-selected="false">Channels</button>
+      </nav>
+
+      <section data-panel="today" class="pms-panel">
+        <div id="today-stats" class="grid" style="--min:150px;gap:12px"></div>
+        <div class="grid" style="--min:300px;margin-top:20px">
+          <div><h2 class="label" style="margin-bottom:10px">Arriving today</h2><div id="today-arrivals" class="stack" style="--gap:10px"></div></div>
+          <div><h2 class="label" style="margin-bottom:10px">Leaving today</h2><div id="today-departures" class="stack" style="--gap:10px"></div></div>
+          <div><h2 class="label" style="margin-bottom:10px">In house</h2><div id="today-inhouse" class="stack" style="--gap:10px"></div></div>
+        </div>
+        <h2 class="label" style="margin:28px 0 10px">Rooms</h2>
+        <div id="today-rooms" class="grid" style="--min:110px;gap:8px"></div>
+      </section>
+
+      <section data-panel="calendar" class="pms-panel" hidden>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+          <button class="btn small ghost" type="button" data-cal="-14">← 2 weeks</button>
+          <button class="btn small ghost" type="button" data-cal="0">Today</button>
+          <button class="btn small ghost" type="button" data-cal="14">2 weeks →</button>
+          <span class="muted" style="font-size:14px">Tap a price to change it. Rows show rooms left / total.</span>
+        </div>
+        <div style="overflow-x:auto;border:2px solid var(--ink);border-radius:16px;background:var(--white)"><table id="cal" class="pms-cal"></table></div>
+        <form id="bulk" class="card" style="margin-top:20px">
+          <h2 class="h-m" style="font-size:24px;margin-bottom:12px">Bulk update</h2>
+          <div class="grid" style="--min:160px;gap:12px">
+            <label class="field"><span>Rate plan</span><select name="plan" required></select></label>
+            <label class="field"><span>From</span><input type="date" name="from" required /></label>
+            <label class="field"><span>Until (excl.)</span><input type="date" name="to" required /></label>
+            <label class="field"><span>Price ₹ (blank = keep)</span><input type="number" name="price" min="0" step="50" /></label>
+            <label class="field"><span>Min nights (blank = keep)</span><input type="number" name="min_stay" min="1" max="60" /></label>
+            <label class="field"><span>Selling</span><select name="stop"><option value="">Keep</option><option value="open">Open</option><option value="stop">Stop sell</option></select></label>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="btn" type="submit">Apply</button></div>
+        </form>
+        <form id="block" class="card" style="margin-top:16px">
+          <h2 class="h-m" style="font-size:24px;margin-bottom:12px">Block rooms</h2>
+          <div class="grid" style="--min:160px;gap:12px">
+            <label class="field"><span>Room type</span><select name="rt" required></select></label>
+            <label class="field"><span>From</span><input type="date" name="from" required /></label>
+            <label class="field"><span>Until (excl.)</span><input type="date" name="to" required /></label>
+            <label class="field"><span>Rooms</span><input type="number" name="units" min="1" value="1" required /></label>
+            <label class="field"><span>Reason</span><input name="reason" maxlength="80" placeholder="Maintenance, owner stay…" /></label>
+          </div>
+          <button class="btn" type="submit" style="margin-top:14px">Block</button>
+        </form>
+      </section>
+
+      <section data-panel="reservations" class="pms-panel" hidden>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <label class="field" style="flex:1 1 200px"><span>Search</span><input id="res-q" type="search" placeholder="Name, code, email, source" /></label>
+          <label class="field" style="flex:0 1 180px"><span>Status</span><select id="res-status"><option value="">All</option><option>confirmed</option><option>checked_in</option><option>checked_out</option><option>hold</option><option>cancelled</option><option>expired</option><option>no_show</option></select></label>
+        </div>
+        <div id="res-list" class="stack" style="--gap:10px"></div>
+      </section>
+
+      <section data-panel="new" class="pms-panel" hidden>
+        <form id="new-form" class="card stack" style="max-width:760px;--gap:14px">
+          <h2 class="h-m" style="font-size:24px">Walk-in or phone booking</h2>
+          <div class="grid" style="--min:180px;gap:12px">
+            <label class="field"><span>Check-in</span><input type="date" name="in" required /></label>
+            <label class="field"><span>Check-out</span><input type="date" name="out" required /></label>
+            <label class="field"><span>Guests</span><input type="number" name="adults" min="1" max="12" value="2" required /></label>
+          </div>
+          <label class="field"><span>Room and rate</span><select name="plan" required><option value="">Pick dates first</option></select></label>
+          <div class="grid" style="--min:180px;gap:12px">
+            <label class="field"><span>Guest name</span><input name="name" required /></label>
+            <label class="field"><span>Email</span><input name="email" type="email" required /></label>
+            <label class="field"><span>Phone</span><input name="phone" /></label>
+            <label class="field"><span>Source</span><select name="source"><option value="walk_in">Walk-in</option><option value="phone">Phone / WhatsApp</option><option value="direct">Direct</option></select></label>
+            <label class="field"><span>Paid now ₹</span><input type="number" name="paid" min="0" step="1" value="0" /></label>
+            <label class="field"><span>Method</span><select name="method"><option>cash</option><option>upi</option><option>card</option><option>bank_transfer</option></select></label>
+          </div>
+          <p id="new-msg" role="status" class="muted"></p>
+          <button class="btn red" type="submit">Create booking</button>
+        </form>
+      </section>
+
+      <section data-panel="channels" class="pms-panel" hidden>
+        <div class="grid" style="--min:280px">
+          <div class="card"><p class="label" style="color:var(--leaf)">Channel manager</p><p class="h-m" style="font-size:24px;margin:6px 0">Channex</p><p class="muted" id="ch-status"></p></div>
+          <div class="card" id="ch-sim-box" hidden><p class="label" style="color:var(--laterite)">Demo</p><p style="margin:6px 0 12px">Pretend an OTA sent a booking, to see how it lands in the PMS.</p><button id="ch-sim" class="btn small" type="button">Simulate OTA booking</button></div>
+        </div>
+        <h2 class="label" style="margin:24px 0 10px">Sync log</h2>
+        <div id="ch-log" class="stack" style="--gap:6px"></div>
+      </section>
+    </div>
+
+    <dialog id="res-dialog" style="max-width:560px;width:calc(100% - 32px);border:2px solid var(--ink);border-radius:20px;padding:0">
+      <div id="res-detail" style="padding:24px"></div>
+    </dialog>
+  </section>
+</Base>
+<style is:global>
+  .pms-tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 2px solid var(--ink); margin-bottom: 20px; }
+  .pms-tabs button { font: 600 15px var(--body); background: none; border: 0; padding: 12px 14px; min-height: 44px; white-space: nowrap; cursor: pointer; color: var(--ink-2); border-bottom: 3px solid transparent; }
+  .pms-tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--laterite); }
+  .pms-cal { border-collapse: collapse; font-size: 13px; min-width: 100%; }
+  .pms-cal th, .pms-cal td { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); padding: 6px 4px; text-align: center; min-width: 56px; }
+  .pms-cal th:first-child, .pms-cal td:first-child { position: sticky; left: 0; background: var(--white); text-align: left; min-width: 150px; padding-left: 10px; z-index: 1; }
+  .pms-cal .rt td { background: #F6F1E7; font-weight: 600; }
+  .pms-cal .full { background: #fbebeb; color: var(--laterite); }
+  .pms-cal .stop { text-decoration: line-through; color: var(--ink-3); }
+  .pms-cal button { font: inherit; background: none; border: 0; cursor: pointer; padding: 6px 2px; min-height: 32px; width: 100%; }
+  .pms-cal .wkend { background: #FBF8F1; }
+  .res-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--white); border: 2px solid var(--ink); border-radius: 14px; padding: 12px 14px; text-align: left; font: inherit; color: inherit; cursor: pointer; width: 100%; }
+  .pill { display: inline-block; border-radius: 999px; padding: 3px 10px; font: 500 12px var(--mono); text-transform: uppercase; }
+  dialog::backdrop { background: rgba(22, 19, 15, .5); }
+</style>
+<script>import '../../scripts/pms-admin';</script>

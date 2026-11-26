@@ -1,0 +1,70 @@
+---
+import BookingBar from './BookingBar.astro';
+import { whatsappLink } from '../data/site';
+import { u } from '../lib/url';
+---
+<section class="wrap" style="padding:28px 0 96px">
+  <p id="be-demo" hidden class="notice" style="border-radius:14px;margin-bottom:20px;text-align:left">Prototype booking engine running on sample rooms and prices. No real booking is made and no money is taken.</p>
+  <p class="label" style="color:var(--leaf);margin-bottom:12px">Book direct · best rate · instant confirmation</p>
+  <h1 class="h-l">Book your stay</h1>
+  <ol class="label be-steps" aria-label="Booking steps" style="display:flex;gap:8px;flex-wrap:wrap;list-style:none;padding:0;margin:20px 0 24px">
+    <li data-be-step="results">1 · Room</li><li data-be-step="details">2 · Your details</li><li data-be-step="pay">3 · Pay</li><li data-be-step="done">4 · Done</li>
+  </ol>
+  <BookingBar />
+  <p id="be-search-error" class="card" hidden role="alert" style="margin-top:16px;color:var(--laterite)"></p>
+
+  <div id="be-results" style="margin-top:28px">
+    <h2 tabindex="-1" class="visually-hidden">Rooms and prices</h2>
+    <p id="be-summary" class="label muted" style="margin-bottom:16px"></p>
+    <div id="be-rooms" class="stack" style="--gap:18px" aria-live="polite"></div>
+  </div>
+
+  <div id="be-details" hidden style="margin-top:28px">
+    <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+      <form id="be-details-form" class="card stack" style="flex:999 1 420px;--gap:16px">
+        <h2 tabindex="-1" class="h-m">Your details</h2>
+        <div class="grid" style="--min:220px;gap:14px">
+          <label class="field"><span>Full name *</span><input name="name" required maxlength="120" autocomplete="name" /></label>
+          <label class="field"><span>Email *</span><input name="email" type="email" required maxlength="120" autocomplete="email" /></label>
+          <label class="field"><span>Phone (WhatsApp)</span><input name="phone" type="tel" maxlength="25" autocomplete="tel" placeholder="+91 …" /></label>
+          <label class="field"><span>Country</span><input name="country" maxlength="60" autocomplete="country-name" /></label>
+        </div>
+        <label class="field"><span>Anything we should know?</span><textarea name="notes" maxlength="500" placeholder="Arrival time, work hours, dietary needs…"></textarea></label>
+        <p id="be-details-error" hidden role="alert" style="color:var(--laterite);font-weight:600"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" id="be-back" class="btn ghost">Back to rooms</button><button type="submit" class="btn red">Continue to payment</button></div>
+        <p class="muted" style="font-size:13px">We hold your room for 15 minutes while you pay.</p>
+      </form>
+      <aside id="be-details-summary" class="card" style="flex:1 1 300px;min-width:0"></aside>
+    </div>
+  </div>
+
+  <div id="be-pay" hidden style="margin-top:28px">
+    <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+      <div class="card stack" style="flex:999 1 420px">
+        <h2 tabindex="-1" class="h-m">Pay to confirm</h2>
+        <p>Your room is held as <strong id="be-pay-code"></strong>. Time left: <strong id="be-pay-timer" aria-live="off"></strong></p>
+        <button id="be-pay-btn" class="btn red" type="button" style="width:100%">Pay</button>
+        <p id="be-pay-error" hidden role="alert" style="color:var(--laterite);font-weight:600"></p>
+        <p class="muted" style="font-size:13px">Secure payment by Razorpay: UPI, cards, net banking and wallets.</p>
+      </div>
+      <aside id="be-pay-summary" class="card" style="flex:1 1 300px;min-width:0"></aside>
+    </div>
+  </div>
+
+  <div id="be-done" hidden style="margin-top:28px;max-width:720px">
+    <h2 tabindex="-1" id="be-done-title" class="h-l">You're booked.</h2>
+    <div id="be-done-body" class="card" style="margin-top:20px"></div>
+    <div class="sand" style="border-radius:22px;padding:22px;margin-top:24px">
+      <p style="font-weight:600">Next: meet the village</p>
+      <p class="muted" style="margin:6px 0 14px">Make your profile, RSVP to this week's events and see who else is around.</p>
+      <a class="btn" href={u('/village/me/')}>Create your profile</a>
+    </div>
+  </div>
+
+  <p class="muted" style="margin-top:40px">Long stay, a team, or a question first? <a href={whatsappLink('Hi NomadGao! I would like to ask about a stay.')} target="_blank" rel="noopener">WhatsApp a host</a>.</p>
+</section>
+<style is:global>
+  .be-steps li { padding: 6px 12px; border-radius: 999px; border: 2px solid var(--line); }
+  .be-steps li.on { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+</style>
+<script>import '../scripts/booking-engine';</script>

@@ -31,6 +31,13 @@ export function whatsappLink(message: string) {
 }
 
 /**
+ * Which booking engine the booking box uses.
+ *  'native'    our own engine on /book/ (demo data until Supabase is connected)
+ *  'stayflexi' hand guests to book.nomadgao.com
+ */
+export const bookingEngine: 'native' | 'stayflexi' = 'native';
+
+/**
  * Stayflexi booking engine (book.nomadgao.com) deep links.
  *
  * Stayflexi does not publish its link format, so the formats below are the

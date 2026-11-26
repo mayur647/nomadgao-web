@@ -1,0 +1,52 @@
+---
+import BookingBar from './BookingBar.astro';
+import { stays } from '../data/stays';
+import { whatsappLink } from '../data/site';
+import { u } from '../lib/url';
+---
+  <section class="wrap" style="padding:32px 0 96px;max-width:980px">
+    <div id="handoff" hidden class="card" style="margin-bottom:32px">
+      <p class="label" style="color:var(--leaf)">One moment</p>
+      <p class="h-m" style="margin-top:8px">Taking you to live rooms and prices…</p>
+      <p class="muted" style="margin-top:8px">If nothing happens, <a id="handoff-link" href="#">tap here</a>.</p>
+    </div>
+    <p class="label" style="color:var(--leaf);margin-bottom:12px">Book direct · best rate · secure payment by Stayflexi</p>
+    <h1 class="h-l">Book your stay</h1>
+    <p class="lead muted" style="margin:16px 0 28px">Choose a place, your dates and how many of you. You will see the rooms and prices available for exactly those dates.</p>
+    <BookingBar />
+    <div class="grid" style="--min:260px;margin-top:48px">
+      {stays.map((s) => (
+        <div class="card">
+          <p class="label" style="color:var(--laterite)">{s.region}, {s.state}</p>
+          <p class="h-m" style="margin:8px 0">{s.property}</p>
+          <p class="muted" style="font-size:15px">{s.tagline}</p>
+          <p style="margin-top:12px"><a href={u(`/stays/${s.slug}/`)}>About this stay →</a></p>
+        </div>
+      ))}
+      <div class="sand" style="border-radius:var(--r);padding:22px">
+        <p style="font-weight:600">Long stay, team or a question first?</p>
+        <p class="muted" style="margin:6px 0 14px;font-size:15px">A host will sort it out on WhatsApp, usually within a few hours.</p>
+        <a class="btn ghost small" href={whatsappLink('Hi NomadGao! I would like to ask about a stay.')} target="_blank" rel="noopener">WhatsApp a host</a>
+      </div>
+    </div>
+  </section>
+<script>
+  // Arriving with ?stay=&in=&out=&adults= (links, or the booking box without JS): go straight to Stayflexi.
+  import { validate, linkFor } from '../scripts/booking';
+  const q = new URLSearchParams(location.search);
+  const stay = q.get('stay') ?? '', checkIn = q.get('in') ?? '', checkOut = q.get('out') ?? '';
+  const adults = Math.min(Math.max(Number(q.get('adults')) || 2, 1), 12);
+  const form = document.querySelector<HTMLFormElement>('[data-booking-form]');
+  if (form) {
+    const set = (n: string, v: string) => { const el = form.elements.namedItem(n) as HTMLInputElement | null; if (el && v) el.value = v; };
+    set('stay', stay); set('in', checkIn); set('out', checkOut); set('adults', String(adults));
+  }
+  if (stay && !validate(stay, checkIn, checkOut)) {
+    const url = linkFor(stay, checkIn, checkOut, adults);
+    if (url) {
+      document.getElementById('handoff')!.hidden = false;
+      (document.getElementById('handoff-link') as HTMLAnchorElement).href = url;
+      location.replace(url);
+    }
+  }
+</script>

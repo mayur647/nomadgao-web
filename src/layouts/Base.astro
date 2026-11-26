@@ -42,12 +42,12 @@ if (crumbs?.length) {
 }
 const csp = [
   "default-src 'self'",
-  "script-src 'self'",
+  "script-src 'self' https://checkout.razorpay.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https:",
-  `connect-src 'self'${supabaseHost ? ' ' + supabaseHost : ''}`,
-  "frame-src https://www.google.com https://www.youtube-nocookie.com",
+  `connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com${supabaseHost ? ' ' + supabaseHost : ''}`,
+  "frame-src https://www.google.com https://www.youtube-nocookie.com https://api.razorpay.com https://checkout.razorpay.com",
   "form-action 'self' https://book.nomadgao.com",
   "base-uri 'self'",
 ].join('; ');
@@ -80,7 +80,7 @@ const csp = [
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  {previewMode && <div class="notice">Preview build. The live site is <a href="https://www.nomadgao.com">nomadgao.com</a>; bookings made here go to the real booking engine.</div>}
+  {previewMode && <div class="notice">Preview build. The live site is <a href="https://www.nomadgao.com">nomadgao.com</a>. Bookings here are a prototype: no real rooms or payments.</div>}
   <Header />
   <main id="main">
     {crumbs?.length && (

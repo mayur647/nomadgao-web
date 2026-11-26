@@ -1,4 +1,4 @@
-import { bookingUrl } from '../data/site';
+import { bookingUrl, bookingEngine } from '../data/site';
 import { stays } from '../data/stays';
 
 const iso = (d: Date) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -38,7 +38,8 @@ document.querySelectorAll<HTMLFormElement>('[data-booking-form]').forEach((form)
     const problem = validate(stay, inEl.value, outEl.value);
     if (problem) { if (err) err.textContent = problem; return; }
     if (err) err.textContent = '';
-    const url = linkFor(stay, inEl.value, outEl.value, adults);
-    location.href = url ?? form.action + '?' + new URLSearchParams({ stay, in: inEl.value, out: outEl.value, adults: String(adults) });
+    const params = '?' + new URLSearchParams({ stay, in: inEl.value, out: outEl.value, adults: String(adults) });
+    const url = bookingEngine === 'native' ? null : linkFor(stay, inEl.value, outEl.value, adults);
+    location.href = url ?? form.action + params;
   });
 });
